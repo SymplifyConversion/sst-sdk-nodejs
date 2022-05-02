@@ -1,5 +1,5 @@
 variables:
-  NODE_VERSION: 16.15
+  NODE_VERSION: "16.15"
 
 stages:
   - build
