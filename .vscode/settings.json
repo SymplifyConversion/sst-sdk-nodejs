@@ -1,0 +1,7 @@
+{
+  "eslint.format.enable": true,
+  "recommendations": [
+    "dbaeumer.vscode-eslint"
+  ],
+  "eslint.enable": true
+}

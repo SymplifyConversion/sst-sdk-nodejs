@@ -1,0 +1,35 @@
+variables:
+  NODE_VERSION: 16.15
+
+stages:
+  - build
+  - test
+
+get-deps:
+  image: node:${NODE_VERSION}
+  stage: .pre # before all stages
+  cache:
+    key: NPM_SHARED_GLOBAL
+    paths:
+      - .npm/
+  script:
+    - npm ci --cache .npm --prefer-offline
+  artifacts:
+    paths:
+    - node_modules/
+
+build:
+  image: node:${NODE_VERSION}
+  stage: build
+  script:
+    - npm run build
+  artifacts:
+    paths:
+    - lib/
+
+test:
+  image: node:${NODE_VERSION}
+  stage: test
+  script:
+    - npm run lint
+    - npm run test
