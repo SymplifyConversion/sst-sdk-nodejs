@@ -22,6 +22,7 @@ build:
   image: node:${NODE_VERSION}
   stage: build
   script:
+    - npm run lint
     - npm run build
   artifacts:
     paths:
@@ -31,5 +32,4 @@ test:
   image: node:${NODE_VERSION}
   stage: test
   script:
-    - npm run lint
     - npm run test
