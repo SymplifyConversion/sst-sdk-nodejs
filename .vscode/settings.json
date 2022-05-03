@@ -1,7 +1,6 @@
 {
-  "eslint.format.enable": true,
-  "recommendations": [
-    "dbaeumer.vscode-eslint"
-  ],
-  "eslint.enable": true
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.detectIndentation": false,
+    "eslint.enable": true,
+    "eslint.format.enable": true
 }
