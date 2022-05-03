@@ -1,8 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-// CON-1436
-// [nodejs] port the visitor id, hash, variation allocation tests
-
 import { djb2 } from "../src/hash";
 
 describe("hash is compatible", () => {
