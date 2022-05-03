@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "description": "This is the Node.js implementation of the Symplify Server-Side Testing SDK.",
   "license": "MIT",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "files": [
-    "lib/**/*"
+    "lib"
   ],
   "scripts": {
     "dev": "tsc --watch",
