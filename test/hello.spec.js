@@ -3,7 +3,7 @@
 const { hello } = require("../lib").default;
 
 describe("Hello, World", () => {
-  test("can say the thing", () => {
-    expect(hello()).toBe("Hello, world!");
-  });
+    test("can say the thing", () => {
+        expect(hello()).toBe("Hello, world!");
+    });
 });
