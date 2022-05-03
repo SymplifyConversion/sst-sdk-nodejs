@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "dev": "tsc --watch",
-    "lint": "eslint src",
+    "lint": "eslint src test",
     "build": "tsc",
     "test": "jest"
   },
