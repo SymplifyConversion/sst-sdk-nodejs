@@ -1,12 +1,15 @@
 {
+  "include": ["src"],
+  "exclude": ["node_modules"],
   "compilerOptions": {
+    "outDir": "lib",
     "target": "ES2020",
     "module": "CommonJS",
+    "moduleResolution": "node",
     "declaration": true,
-    "outDir": "./lib",
+    "sourceMap": true,
     "strict": true,
+    "esModuleInterop": true,
     "noImplicitAny": true
-  },
-  "include": ["src"],
-  "exclude": ["node_modules", "**/__tests__/*"]
+  }
 }
