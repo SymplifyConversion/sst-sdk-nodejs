@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-
 import { djb2 } from "../src/hash";
 
 describe("hash is compatible", () => {
