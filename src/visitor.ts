@@ -1,4 +1,5 @@
 import { randomUUID } from "crypto";
+import { JSONCookieCodec } from "./cookies";
 
 const JSON_COOKIE_NAME = "sg_cookies";
 const JSON_COOKIE_VERSION_KEY = "_g";
@@ -21,10 +22,12 @@ export function ensureVisitorID(
     websiteID: string,
     idGenerator: () => string = randomUUID
 ): string | null {
-    const existingCookie = getCookie(JSON_COOKIE_NAME);
-    const sgCookies = existingCookie
-        ? JSON.parse(decodeURIComponent(existingCookie))
-        : { [JSON_COOKIE_VERSION_KEY]: SUPPORTED_JSON_COOKIE_VERSION };
+    const cookies = new JSONCookieCodec({ get: getCookie, set: setCookie });
+
+    const existingCookie = cookies.get(JSON_COOKIE_NAME);
+    const sgCookies = existingCookie || {
+        [JSON_COOKIE_VERSION_KEY]: SUPPORTED_JSON_COOKIE_VERSION,
+    };
 
     if (sgCookies[JSON_COOKIE_VERSION_KEY] != SUPPORTED_JSON_COOKIE_VERSION) {
         return null;
@@ -38,7 +41,7 @@ export function ensureVisitorID(
     if (!vid) {
         vid = idGenerator();
         sgCookies[websiteID][JSON_COOKIE_VISITOR_ID_KEY] = vid;
-        setCookie(JSON_COOKIE_NAME, encodeURIComponent(JSON.stringify(sgCookies)));
+        cookies.set(JSON_COOKIE_NAME, sgCookies);
     }
 
     return vid;

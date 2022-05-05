@@ -1,5 +1,6 @@
 import crypto from "crypto";
 import { ensureVisitorID } from "../src/visitor";
+import { generateConstantID, makeCookieJar } from "./helpers";
 
 const JSON_COOKIE_NAME = "sg_cookies";
 const VISITOR_ID_COOKIE_KEY = "visid";
@@ -66,8 +67,8 @@ describe("ensureVisitorID", () => {
 
         const sentinel = "this is not a UUID!";
 
-        const returnedIDA = ensureVisitorID(cookiesA.get, cookiesA.set, "no matter") || sentinel;
-        const returnedIDB = ensureVisitorID(cookiesA.get, cookiesB.set, "don't care") || sentinel;
+        const returnedIDA = ensureVisitorID(cookiesA.get, cookiesA.set, "websiteID") || sentinel;
+        const returnedIDB = ensureVisitorID(cookiesB.get, cookiesB.set, "websiteID") || sentinel;
 
         expect(looksLikeUUID(returnedIDA)).toBe(true);
         expect(looksLikeUUID(returnedIDB)).toBe(true);
@@ -86,17 +87,4 @@ describe("(test code) looksLikeUUID", () => {
 
 function looksLikeUUID(s: string): boolean {
     return /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/.test(s);
-}
-
-function generateConstantID(id: string) {
-    return () => id;
-}
-
-function makeCookieJar() {
-    const cookies: Record<string, string> = {};
-
-    return {
-        get: (key: string) => cookies[key],
-        set: (key: string, val: string) => (cookies[key] = val),
-    };
 }
