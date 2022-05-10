@@ -24,7 +24,7 @@ export type VariationConfig = {
 
 export function findProjectWithName(
     config: SymplifyConfig,
-    projectName: string
+    projectName: string,
 ): ProjectConfig | null {
     for (const project of config.projects) {
         if (project.name === projectName) {
@@ -37,7 +37,7 @@ export function findProjectWithName(
 
 export function findVariationForVisitor(
     project: ProjectConfig,
-    visitorID: string
+    visitorID: string,
 ): VariationConfig | null {
     if (!visitorID || project.state != "active") {
         return null;

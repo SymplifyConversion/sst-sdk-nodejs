@@ -20,7 +20,7 @@ export function ensureVisitorID(
     getCookie: (name: string) => string,
     setCookie: (name: string, value: string) => void,
     websiteID: string,
-    idGenerator: () => string = randomUUID
+    idGenerator: () => string = randomUUID,
 ): string | null {
     const cookies = new JSONCookieCodec({ get: getCookie, set: setCookie });
 
