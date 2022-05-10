@@ -2,10 +2,6 @@
 
 This is the Node.js implementation of the Symplify Server-Side Testing SDK.
 
-## Archived
-
-This project was moved to https://github.com/SymplifyConversion/sst-sdk-nodejs
-
 ## Changes
 
 See [CHANGELOG.md](./CHANGELOG.md)
@@ -14,9 +10,13 @@ See [CHANGELOG.md](./CHANGELOG.md)
 
 * [Node.js](https://nodejs.org/en/) 16.15.0 (LTS) or later
 
+Should be compatible with any web framework, as long as it can get and set
+cookies. The cookie integration will require framework specific adapters,
+but the interface is simple.
+
 ## Installing
 
-Coming soon...
+NPM package coming soon...
 
 ## Usage
 
