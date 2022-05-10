@@ -14,7 +14,7 @@ describe("ensureVisitorID", () => {
             cookies.get,
             cookies.set,
             testWebsiteID,
-            generateConstantID("goober")
+            generateConstantID("goober"),
         );
 
         const cookieObj = JSON.parse(decodeURIComponent(cookies.get(JSON_COOKIE_NAME)));
@@ -36,7 +36,7 @@ describe("ensureVisitorID", () => {
             cookies.get,
             cookies.set,
             testWebsiteID,
-            generateConstantID("goober")
+            generateConstantID("goober"),
         );
 
         expect(returnedID).toBe("78ac2972-de5f-4262-bfdb-7296eb132a94");
@@ -55,7 +55,7 @@ describe("ensureVisitorID", () => {
             cookies.get,
             cookies.set,
             testWebsiteID,
-            generateConstantID("goober")
+            generateConstantID("goober"),
         );
 
         expect(returnedID).toBe(null);

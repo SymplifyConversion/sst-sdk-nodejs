@@ -41,7 +41,7 @@ export class SymplifySDK {
     constructor(
         websiteID: string,
         deps: ClientDependencies = {},
-        configUpdateInterval = DEFAULT_CONFIG_UPDATE_INTERVAL
+        configUpdateInterval = DEFAULT_CONFIG_UPDATE_INTERVAL,
     ) {
         if (configUpdateInterval < 1) {
             throw new Error("configUpdateInterval < 1");
@@ -118,7 +118,7 @@ export class SymplifySDK {
         return this.fetchConfig()
             .then((newCfg) => {
                 this.log.info(
-                    `config received: ${newCfg.projects.length} projects, updated: ${newCfg.updated}`
+                    `config received: ${newCfg.projects.length} projects, updated: ${newCfg.updated}`,
                 );
                 this.config.latest = newCfg;
             })
