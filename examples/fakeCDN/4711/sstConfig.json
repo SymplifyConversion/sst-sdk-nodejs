@@ -1,0 +1,16 @@
+{
+  "updated": 1651493828,
+  "privacy_mode": 0,
+  "projects": [
+    {
+      "id": 1002,
+      "name": "discounts",
+      "variations": [
+        { "id": 10021, "name": "Original", "weight": 25, "state": "active" },
+        { "id": 10022, "name": "large", "weight": 25, "state": "active" },
+        { "id": 10023, "name": "small", "weight": 25, "state": "active" }
+      ],
+      "state": "active"
+    }
+  ]
+}
