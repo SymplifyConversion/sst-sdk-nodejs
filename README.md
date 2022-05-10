@@ -2,6 +2,10 @@
 
 This is the Node.js implementation of the Symplify Server-Side Testing SDK.
 
+## Archived
+
+This project was moved to https://github.com/SymplifyConversion/sst-sdk-nodejs
+
 ## Changes
 
 See [CHANGELOG.md](./CHANGELOG.md)
