@@ -39,8 +39,8 @@ export function findVariationForVisitor(
     project: ProjectConfig,
     visitorID: string
 ): VariationConfig | null {
-    if (!visitorID) {
-        return project.variations[0];
+    if (!visitorID || project.state != "active") {
+        return null;
     }
 
     let totalWeight = 0;
@@ -57,7 +57,7 @@ export function findVariationForVisitor(
     for (const variation of project.variations) {
         pointer += variation.weight;
         if (hash <= pointer) {
-            return variation;
+            return variation.state == "active" ? variation : null;
         }
     }
 

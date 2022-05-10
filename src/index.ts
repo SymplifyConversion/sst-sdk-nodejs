@@ -1,7 +1,3 @@
-function hello() {
-    return "Hello, world!";
-}
+import { SymplifySDK } from "./client";
 
-export default {
-    hello,
-};
+module.exports = SymplifySDK;

@@ -34,7 +34,7 @@ describe("Variation allocation", () => {
         expect(variation.id).toBe(1337);
     });
 
-    test("returns the original variation for empty visitor ID", () => {
+    test("returns no variation for empty visitor ID", () => {
         const originalID = Math.ceil(Math.random() * 1000);
         const variationID = 1000 + Math.ceil(Math.random() * 1000);
         const testProject: ProjectConfig = {
@@ -58,7 +58,7 @@ describe("Variation allocation", () => {
         };
 
         const variation = findVariationForVisitor(testProject, "") || sentinelVariation;
-        expect(variation.id).toBe(originalID);
+        expect(variation).toBe(sentinelVariation);
     });
 
     test("handles long visitor IDs", () => {
