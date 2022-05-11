@@ -2,7 +2,12 @@ import { randomUUID } from "crypto";
 import { CookieJar } from "./cookies";
 import { httpsGET } from "./http";
 import { Logger, NullLogger } from "./logger";
-import { findProjectWithName, findVariationForVisitor, SymplifyConfig } from "./project";
+import {
+    findProjectWithName,
+    findVariationForVisitor,
+    parseConfigJSON,
+    SymplifyConfig,
+} from "./project";
 import { ensureVisitorID } from "./visitor";
 
 const DEFAULT_CONFIG_UPDATE_INTERVAL = 60;
@@ -131,7 +136,7 @@ export class SymplifySDK {
     }
 
     async fetchConfig(): Promise<SymplifyConfig> {
-        return await this.httpGET(this.configURL()).then(JSON.parse);
+        return await this.httpGET(this.configURL()).then(parseConfigJSON);
     }
 }
 

@@ -63,3 +63,8 @@ export function findVariationForVisitor(
 
     return null;
 }
+
+export function parseConfigJSON(json: string): SymplifyConfig {
+    const BOM = /^\xEF\xBB\xBF/;
+    return JSON.parse(json.trimStart().replace(BOM, ""));
+}
