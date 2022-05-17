@@ -118,5 +118,14 @@
     "test_project_name": "test project",
     "expect_variation_match": null,
     "expect_sg_cookie_properties_match": {}
+  },
+  {
+    "test_name": "cookie allocated but inactive project",
+    "sdk_config": "sdk_config.json",
+    "website_id": "10001",
+    "sg_cookies": "{%2210001%22:{%221004%22:[10042]%2C%221004_ch%22:1%2C%22aud_p%22:[1004]%2C%22visid%22:%22a_visitor%22}%2C%22_g%22:1}",
+    "test_project_name": "paused project",
+    "expect_variation_match": null,
+    "expect_sg_cookie_properties_match": {}
   }
 ]

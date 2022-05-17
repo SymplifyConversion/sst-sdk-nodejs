@@ -103,6 +103,10 @@ export class SymplifySDK {
             return null;
         }
 
+        if (project.state != "active") {
+            return null;
+        }
+
         const currAllocation = siteData.getAllocation(project);
 
         switch (currAllocation) {

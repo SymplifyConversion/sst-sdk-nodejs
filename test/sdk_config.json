@@ -29,6 +29,15 @@
         { "id": 10032, "name": "Variation 1", "weight": 0, "state": "paused" }
       ],
       "state": "active"
+    },
+    {
+      "id": 1004,
+      "name": "paused project",
+      "variations": [
+        { "id": 10041, "name": "Original", "weight": 0, "state": "active" },
+        { "id": 10042, "name": "Variation 1", "weight": 0, "state": "paused" }
+      ],
+      "state": "paused"
     }
   ]
 }

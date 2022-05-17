@@ -72,4 +72,18 @@ describe("Variation allocation", () => {
         // "asidub" maps to 75-100, which is outside any variation
         expect(findVariation("asidub").id).toBe(sentinelVariation.id);
     });
+
+    test("doesn't allocate in paused projects", () => {
+        const testProject: ProjectConfig = {
+            id: 4711,
+            name: "discount",
+            state: "paused",
+            variations: [
+                { id: 42, name: "original", state: "active", weight: 25 },
+                { id: 1337, name: "massive", state: "paused", weight: 25 },
+                { id: 11111, name: "extra", state: "active", weight: 25 },
+            ],
+        };
+        expect(findVariationForVisitor(testProject, "anyone")).toBe(null);
+    });
 });
