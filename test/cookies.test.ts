@@ -23,6 +23,14 @@ describe("WebsiteData", () => {
         expect(data.getAllocation(testProject)).toStrictEqual(testVar);
     });
 
+    test("can remember null allocations", () => {
+        const active: ProjectState = "active";
+        const testProject = { id: 1337, name: "project", variations: [], state: active };
+        const data = new WebsiteData("4711", makeCookieJar());
+        data.rememberNullAllocation(testProject);
+        expect(data.getAllocation(testProject)).toBe(null);
+    });
+
     test("can save by setting cookie", () => {
         const active: ProjectState = "active";
         const testVar = { id: 42, name: "a variation", state: active, weight: 100 };

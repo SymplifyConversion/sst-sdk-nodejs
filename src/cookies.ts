@@ -76,6 +76,10 @@ export class WebsiteData {
         this.set(project.id + "", [variation.id]);
     }
 
+    rememberNullAllocation(project: ProjectConfig): void {
+        this.set(project.id + "_ch", -1);
+    }
+
     getAllocation(project: ProjectConfig): VariationConfig | null {
         if (this.get(project.id + "_ch") != 1) {
             return null;
