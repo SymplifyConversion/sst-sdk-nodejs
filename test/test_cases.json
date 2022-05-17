@@ -6,7 +6,9 @@
     "sg_cookies": null,
     "test_project_name": "does not exist",
     "expect_variation_match": null,
-    "expect_cookie_match": null
+    "expect_sg_cookie_properties_match": {
+      "10001/visid": null
+    }
   },
   {
     "test_name": "no cookie generates ID, allocates any variation",
@@ -15,42 +17,52 @@
     "sg_cookies": null,
     "test_project_name": "all active",
     "expect_variation_match": "Original|Variation",
-    "expect_cookie_match": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+    "expect_sg_cookie_properties_match": {
+      "10001/visid": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+    }
   },
   {
-    "test_name": "hash is compatible",
+    "test_name": "hash is compatible 1",
     "sdk_config": "sdk_config.json",
     "website_id": "10001",
     "sg_cookies": "{%2210001%22:{%22visid%22:%22foobar%22%2C%22100000002%22:[300001]%2C%22100000001%22:[300002]%2C%22100000002_ch%22:1%2C%22100000001_ch%22:1%2C%22lv%22:1650967549303%2C%22rf%22:%22%22%2C%22pv%22:2%2C%22pv_p%22:{%22100000002%22:2%2C%22100000001%22:2}%2C%22tv%22:2%2C%22tv_p%22:{%22100000002%22:2%2C%22100000001%22:2}%2C%22aud_p%22:[100000002%2C100000001]}%2C%22_g%22:1}",
     "test_project_name": "test project",
     "expect_variation_match": "Original",
-    "expect_cookie_match": "foobar"
+    "expect_sg_cookie_properties_match": {
+      "10001/visid": "foobar"
+    }
   },
   {
-    "test_name": "hash is compatible",
+    "test_name": "hash is compatible 2",
     "sdk_config": "sdk_config.json",
     "website_id": "10001",
     "sg_cookies": "{%2210001%22:{%22visid%22:%22b7850777-f581-4f66-ad3e-4e54963661df%22%2C%22100000002%22:[300001]%2C%22100000001%22:[300002]%2C%22100000002_ch%22:1%2C%22100000001_ch%22:1%2C%22lv%22:1650967549303%2C%22rf%22:%22%22%2C%22pv%22:2%2C%22pv_p%22:{%22100000002%22:2%2C%22100000001%22:2}%2C%22tv%22:2%2C%22tv_p%22:{%22100000002%22:2%2C%22100000001%22:2}%2C%22aud_p%22:[100000002%2C100000001]}%2C%22_g%22:1}",
     "test_project_name": "test project",
     "expect_variation_match": "null",
-    "expect_cookie_match": "b7850777-f581-4f66-ad3e-4e54963661df"
+    "expect_sg_cookie_properties_match": {
+      "10001/visid": "b7850777-f581-4f66-ad3e-4e54963661df"
+    }
   },
   {
-    "test_name": "hash is compatible",
+    "test_name": "hash is compatible 3",
     "sdk_config": "sdk_config.json",
     "website_id": "10001",
     "sg_cookies": "{%2210001%22:{%22visid%22:%22Fabian%22%2C%22100000002%22:[300001]%2C%22100000001%22:[300002]%2C%22100000002_ch%22:1%2C%22100000001_ch%22:1%2C%22lv%22:1650967549303%2C%22rf%22:%22%22%2C%22pv%22:2%2C%22pv_p%22:{%22100000002%22:2%2C%22100000001%22:2}%2C%22tv%22:2%2C%22tv_p%22:{%22100000002%22:2%2C%22100000001%22:2}%2C%22aud_p%22:[100000002%2C100000001]}%2C%22_g%22:1}",
     "test_project_name": "test project",
     "expect_variation_match": "active variation 2",
-    "expect_cookie_match": "Fabian"
+    "expect_sg_cookie_properties_match": {
+      "10001/visid": "Fabian"
+    }
   },
   {
-    "test_name": "hash is compatible",
+    "test_name": "hash is compatible 4",
     "sdk_config": "sdk_config.json",
     "website_id": "10001",
     "sg_cookies": "{%2210001%22:{%22visid%22:%22goober%22%2C%22100000002%22:[300001]%2C%22100000001%22:[300002]%2C%22100000002_ch%22:1%2C%22100000001_ch%22:1%2C%22lv%22:1650967549303%2C%22rf%22:%22%22%2C%22pv%22:2%2C%22pv_p%22:{%22100000002%22:2%2C%22100000001%22:2}%2C%22tv%22:2%2C%22tv_p%22:{%22100000002%22:2%2C%22100000001%22:2}%2C%22aud_p%22:[100000002%2C100000001]}%2C%22_g%22:1}",
     "test_project_name": "test project",
     "expect_variation_match": "active variation 3",
-    "expect_cookie_match": "goober"
+    "expect_sg_cookie_properties_match": {
+      "10001/visid": "goober"
+    }
   }
 ]
