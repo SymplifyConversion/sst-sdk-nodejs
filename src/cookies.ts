@@ -80,14 +80,20 @@ export class WebsiteData {
         this.set(project.id + "_ch", -1);
     }
 
-    getAllocation(project: ProjectConfig): VariationConfig | null {
-        if (this.get(project.id + "_ch") != 1) {
+    /**
+     * Get current allocation info from the website data.
+     *
+     * @param project check existing allocation for this project
+     * @returns the allocated variation if it exists, null if a null allocation exists, undefined if there is no info
+     */
+    getAllocation(project: ProjectConfig): VariationConfig | undefined | null {
+        if (this.get(project.id + "_ch") == -1) {
             return null;
         }
 
         const allocatedVariations = this.get(project.id + "");
         if (!Array.isArray(allocatedVariations)) {
-            return null;
+            return undefined;
         }
 
         for (const variation of project.variations) {
@@ -96,7 +102,7 @@ export class WebsiteData {
             }
         }
 
-        return null;
+        return undefined;
     }
 
     private get(key: string): unknown {

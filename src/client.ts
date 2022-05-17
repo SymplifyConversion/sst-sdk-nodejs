@@ -104,8 +104,17 @@ export class SymplifySDK {
         }
 
         const currAllocation = siteData.getAllocation(project);
-        if (currAllocation != null) {
-            return currAllocation.name;
+
+        switch (currAllocation) {
+            case undefined:
+                // no allocation data
+                break;
+            case null:
+                // explicit null allocation
+                return null;
+            default:
+                // variation allocation
+                return currAllocation.name;
         }
 
         const visID = ensureVisitorID(siteData, this.idGenerator);
@@ -116,14 +125,15 @@ export class SymplifySDK {
 
         const variation = findVariationForVisitor(project, visID);
 
-        if (!variation) {
-            return null;
+        if (variation) {
+            siteData.rememberAllocation(project, variation);
+        } else {
+            siteData.rememberNullAllocation(project);
         }
 
-        siteData.rememberAllocation(project, variation);
         siteData.save(cookies);
 
-        return variation.name;
+        return variation ? variation.name : null;
     }
 
     configURL(): string {
