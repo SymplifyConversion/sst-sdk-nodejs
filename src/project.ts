@@ -43,10 +43,7 @@ export function findVariationForVisitor(
         return null;
     }
 
-    let totalWeight = 0;
-    for (const variation of project.variations) {
-        totalWeight += variation.weight;
-    }
+    const totalWeight = 100;
 
     const hashKey = `${visitorID}:${project.id}`;
     let hash = djb2(hashKey);
