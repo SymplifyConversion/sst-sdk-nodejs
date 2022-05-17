@@ -21,6 +21,15 @@
         { "id": 10022, "name": "Variation 1", "weight": 50, "state": "active" }
       ],
       "state": "active"
+    },
+    {
+      "id": 1003,
+      "name": "no allocations",
+      "variations": [
+        { "id": 10031, "name": "Original", "weight": 0, "state": "active" },
+        { "id": 10032, "name": "Variation 1", "weight": 0, "state": "paused" }
+      ],
+      "state": "active"
     }
   ]
 }

@@ -89,5 +89,14 @@
       "10001/1001": "[10014]",
       "10001/aud_p": "[1001]"
     }
+  },
+  {
+    "test_name": "reuse previous allocation after config change",
+    "sdk_config": "sdk_config.json",
+    "website_id": "10001",
+    "sg_cookies": "{%2210001%22:{%221003%22:[10032]%2C%221003_ch%22:1%2C%22aud_p%22:[1003]%2C%22visid%22:%22a_visitor%22}%2C%22_g%22:1}",
+    "test_project_name": "no allocations",
+    "expect_variation_match": "Variation 1",
+    "expect_sg_cookie_properties_match": {}
   }
 ]

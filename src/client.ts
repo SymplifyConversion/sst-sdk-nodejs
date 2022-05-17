@@ -103,6 +103,11 @@ export class SymplifySDK {
             return null;
         }
 
+        const currAllocation = siteData.getAllocation(project);
+        if (currAllocation != null) {
+            return currAllocation.name;
+        }
+
         const visID = ensureVisitorID(siteData, this.idGenerator);
         if (!visID) {
             this.log.error("could not get or generate a visitor ID");

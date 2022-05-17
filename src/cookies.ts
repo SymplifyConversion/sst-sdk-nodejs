@@ -76,6 +76,25 @@ export class WebsiteData {
         this.set(project.id + "", [variation.id]);
     }
 
+    getAllocation(project: ProjectConfig): VariationConfig | null {
+        if (this.get(project.id + "_ch") != 1) {
+            return null;
+        }
+
+        const allocatedVariations = this.get(project.id + "");
+        if (!Array.isArray(allocatedVariations)) {
+            return null;
+        }
+
+        for (const variation of project.variations) {
+            if (variation.id == allocatedVariations[0]) {
+                return variation;
+            }
+        }
+
+        return null;
+    }
+
     private get(key: string): unknown {
         if (!this.isCompatible()) {
             return null;
