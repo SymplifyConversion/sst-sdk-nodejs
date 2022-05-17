@@ -30,6 +30,9 @@ act -P ubuntu-latest=shivammathur/node:latest
 1. create a new branch for your changes
 1. write code and tests
 1. add the change to [the changelog](./CHANGELOG.md) under "Unreleased"
+1. consider if your change requires a major, minor or patch version change
+   (compared to the latest release before "Unreleased" in the changelog) and
+   update the "-dev" version in package.json accordingly
 1. get the pull request reviewed and approved
 1. squash merge the changes to `main`
 1. delete the branch that was merged
