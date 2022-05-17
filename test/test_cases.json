@@ -64,5 +64,17 @@
     "expect_sg_cookie_properties_match": {
       "10001/visid": "goober"
     }
+  },
+  {
+    "test_name": "incompatible cookie generation",
+    "sdk_config": "sdk_config.json",
+    "website_id": "10001",
+    "sg_cookies": "{%2210001%22:{%22visid%22:%22goober%22}%2C%22_g%22:1000000}",
+    "test_project_name": "test project",
+    "expect_variation_match": null,
+    "expect_sg_cookie_properties_match": {
+      "10001/visid": "goober",
+      "10001/aud_p": null
+    }
   }
 ]

@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import { CookieJar } from "./cookies";
+import { CookieJar, WebsiteData } from "./cookies";
 import { httpsGET } from "./http";
 import { Logger, NullLogger } from "./logger";
 import {
@@ -91,13 +91,19 @@ export class SymplifySDK {
             return null;
         }
 
+        const siteData = new WebsiteData(this.websiteID, cookies);
+        if (!siteData.isCompatible()) {
+            this.log.warn("findVariation: unsupported cookie generation");
+            return null;
+        }
+
         const project = findProjectWithName(this.config.latest, projectName);
         if (!project) {
             this.log.error(`findVariation: unknown project: ${projectName}`);
             return null;
         }
 
-        const visID = ensureVisitorID(cookies.get, cookies.set, this.websiteID, this.idGenerator);
+        const visID = ensureVisitorID(siteData, this.idGenerator);
         if (!visID) {
             this.log.error("could not get or generate a visitor ID");
             return null;
@@ -108,6 +114,8 @@ export class SymplifySDK {
         if (!variation) {
             return null;
         }
+
+        siteData.save(cookies);
 
         return variation.name;
     }
