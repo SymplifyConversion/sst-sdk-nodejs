@@ -76,5 +76,18 @@
       "10001/visid": "goober",
       "10001/aud_p": null
     }
+  },
+  {
+    "test_name": "persist variation allocation",
+    "sdk_config": "sdk_config.json",
+    "website_id": "10001",
+    "sg_cookies": "{%2210001%22:{%22visid%22:%22goober%22}%2C%22_g%22:1}",
+    "test_project_name": "test project",
+    "expect_variation_match": "active variation 3",
+    "expect_sg_cookie_properties_match": {
+      "10001/1001_ch": "1",
+      "10001/1001": "[10014]",
+      "10001/aud_p": "[1001]"
+    }
   }
 ]

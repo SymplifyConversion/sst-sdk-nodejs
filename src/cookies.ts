@@ -1,3 +1,5 @@
+import { ProjectConfig, VariationConfig } from "./project";
+
 export type CookieJar = {
     get: (name: string) => string;
     set: (name: string, value: string) => void;
@@ -59,16 +61,32 @@ export class WebsiteData {
     }
 
     getVisitorID(): string | null {
-        if (!this.isCompatible()) {
-            return null;
-        }
-        return this.jsonCookie[this.websiteID][JSON_COOKIE_VISITOR_ID_KEY];
+        const val = this.get(JSON_COOKIE_VISITOR_ID_KEY);
+        return typeof val == "string" ? val : null;
     }
 
     setVisitorID(visitorID: string): void {
+        this.set(JSON_COOKIE_VISITOR_ID_KEY, visitorID);
+    }
+
+    rememberAllocation(project: ProjectConfig, variation: VariationConfig): void {
+        const prevAudP = this.get("aud_p");
+        this.set("aud_p", (Array.isArray(prevAudP) ? prevAudP : []).concat(project.id));
+        this.set(project.id + "_ch", 1);
+        this.set(project.id + "", [variation.id]);
+    }
+
+    private get(key: string): unknown {
+        if (!this.isCompatible()) {
+            return null;
+        }
+        return this.jsonCookie[this.websiteID][key];
+    }
+
+    private set(key: string, value: unknown): void {
         if (!this.isCompatible()) {
             return;
         }
-        this.jsonCookie[this.websiteID][JSON_COOKIE_VISITOR_ID_KEY] = visitorID;
+        this.jsonCookie[this.websiteID][key] = value;
     }
 }

@@ -115,6 +115,7 @@ export class SymplifySDK {
             return null;
         }
 
+        siteData.rememberAllocation(project, variation);
         siteData.save(cookies);
 
         return variation.name;
