@@ -8,8 +8,7 @@
       "variations": [
         { "id": 10011, "name": "Original", "weight": 25, "state": "active" },
         { "id": 10012, "name": "paused variation 1", "weight": 25, "state": "paused" },
-        { "id": 10013, "name": "active variation 2", "weight": 25, "state": "active" },
-        { "id": 10014, "name": "active variation 3", "weight": 25, "state": "active" }
+        { "id": 10013, "name": "active variation 2", "weight": 25, "state": "active" }
       ],
       "state": "active"
     },
