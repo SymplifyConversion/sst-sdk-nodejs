@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+- persist allocations in cookie, we want it stable even if config changes
+- improve the data driven SDK compatibility test suite
+### Changed
+- move cookie handling out from visitor module, needed for allocations as well
+- total weight is always 100, allows for projects without full allocation
+- don't allocate if project is inactive
+
 ## [0.1.0] - 2022-05-12
 ### Added
 - A first version of the SDK

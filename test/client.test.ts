@@ -21,9 +21,13 @@ describe("SymplifySDK client", () => {
             const variation = sdk.findVariation(t.test_project_name, cookies);
             sdk.stop();
 
-            const reCookie = new RegExp(t.expect_cookie_match);
+            const sgCookies = JSON.parse(decodeURIComponent(cookies.get("sg_cookies") || "{}"));
 
-            expect(cookies.get("sg_cookies") || "null").toMatch(reCookie);
+            for (const [keypath, regex] of Object.entries(t.expect_sg_cookie_properties_match)) {
+                const reCookie = new RegExp(regex as string);
+                const leaf = keypath.split("/").reduce((acc, p) => (acc || {})[p], sgCookies);
+                expect("" + (leaf || "null")).toMatch(reCookie);
+            }
 
             const reVariation = new RegExp(t.expect_variation_match);
             expect(variation || "null").toMatch(reVariation);

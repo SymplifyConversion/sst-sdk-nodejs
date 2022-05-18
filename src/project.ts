@@ -39,14 +39,11 @@ export function findVariationForVisitor(
     project: ProjectConfig,
     visitorID: string,
 ): VariationConfig | null {
-    if (!visitorID || project.state != "active") {
+    if (!visitorID || project.state !== "active") {
         return null;
     }
 
-    let totalWeight = 0;
-    for (const variation of project.variations) {
-        totalWeight += variation.weight;
-    }
+    const totalWeight = 100;
 
     const hashKey = `${visitorID}:${project.id}`;
     let hash = djb2(hashKey);
@@ -57,7 +54,7 @@ export function findVariationForVisitor(
     for (const variation of project.variations) {
         pointer += variation.weight;
         if (hash <= pointer) {
-            return variation.state == "active" ? variation : null;
+            return variation.state === "active" ? variation : null;
         }
     }
 
