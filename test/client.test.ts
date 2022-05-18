@@ -14,7 +14,9 @@ describe("SymplifySDK client", () => {
             const cookies = makeCookieJar();
             const configJSON = fs.readFileSync("test/" + t.sdk_config).toString();
             const httpGET = constantHTTP(configJSON);
-            cookies.set("sg_cookies", t.sg_cookies);
+            for (const [name, value] of Object.entries(t.cookies || {})) {
+                cookies.set(name, "" + value);
+            }
 
             const sdk = new SymplifySDK(t.website_id, { httpGET });
             await sdk.ready;
