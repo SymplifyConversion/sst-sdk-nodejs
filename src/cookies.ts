@@ -126,3 +126,9 @@ export class WebsiteData {
         this.jsonCookie[this.websiteID][key] = value;
     }
 }
+
+const OPTIN_COOKIE_NAME = "sg_optin";
+
+export function visitorHasOptedIn(cookies: CookieReader) {
+    return cookies.get(OPTIN_COOKIE_NAME) === "1";
+}

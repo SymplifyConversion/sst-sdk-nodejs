@@ -1,11 +1,12 @@
 import { randomUUID } from "crypto";
-import { CookieJar, WebsiteData } from "./cookies";
+import { CookieJar, visitorHasOptedIn, WebsiteData } from "./cookies";
 import { httpsGET } from "./http";
 import { Logger, NullLogger } from "./logger";
 import {
     findProjectWithName,
     findVariationForVisitor,
     parseConfigJSON,
+    PrivacyMode,
     SymplifyConfig,
 } from "./project";
 import { ensureVisitorID } from "./visitor";
@@ -88,6 +89,14 @@ export class SymplifySDK {
     public findVariation(projectName: string, cookies: CookieJar): string | null {
         if (this.config.latest === null) {
             this.log.warn("findVariation before config was ready");
+            return null;
+        }
+
+        // bail out as early as possible if visitor has not opted in
+        if (
+            this.config.latest.privacy_mode === PrivacyMode.OPTIN_EVERYTHING &&
+            !visitorHasOptedIn(cookies)
+        ) {
             return null;
         }
 
