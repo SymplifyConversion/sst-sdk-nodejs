@@ -11,9 +11,10 @@ We practice [trunk based development](https://trunkbaseddevelopment.com) and
 1. update [package.json](./package.json) if needed to match the version, and remove any prelease suffix
 1. open a pull request with your release branch
 1. get the pull request reviewed and approved
+1. run `./pre-publish.sh vX.Y.Z` (it will run tests and ensure a clean build, and remind you of the steps below)
 1. tag the approved commit `vX.Y.Z`
 1. publish the NPM package
 1. bump the version in package.json up to the next patch version, with a "-dev" suffix
-1. squash merge the changes to `main`
+1. push the branch, then squash merge your changes to `main`
 1. *DO NOT* delete the release branch
 1. [create a matching GitHub release](https://github.com/SymplifyConversion/sst-sdk-nodejs/releases/new)
