@@ -39,7 +39,7 @@ export function findVariationForVisitor(
     project: ProjectConfig,
     visitorID: string,
 ): VariationConfig | null {
-    if (!visitorID || project.state != "active") {
+    if (!visitorID || project.state !== "active") {
         return null;
     }
 
@@ -54,7 +54,7 @@ export function findVariationForVisitor(
     for (const variation of project.variations) {
         pointer += variation.weight;
         if (hash <= pointer) {
-            return variation.state == "active" ? variation : null;
+            return variation.state === "active" ? variation : null;
         }
     }
 

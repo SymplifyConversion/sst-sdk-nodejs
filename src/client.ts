@@ -103,7 +103,7 @@ export class SymplifySDK {
             return null;
         }
 
-        if (project.state != "active") {
+        if (project.state !== "active") {
             return null;
         }
 
