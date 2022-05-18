@@ -2,9 +2,16 @@ import { djb2 } from "./hash";
 
 export type ProjectState = "paused" | "active";
 
+export enum PrivacyMode {
+    DEFAULT = 0,
+    OPTIN_TRACKING = 1,
+    OPTIN_EVERYTHING = 2,
+}
+
 export type SymplifyConfig = {
     /** in seconds from epoch */
     updated: number;
+    privacy_mode: PrivacyMode;
     projects: ProjectConfig[];
 };
 

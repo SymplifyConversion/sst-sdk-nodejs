@@ -1,9 +1,14 @@
 import { ProjectConfig, VariationConfig } from "./project";
 
-export type CookieJar = {
+export type CookieReader = {
     get: (name: string) => string;
+};
+
+export type CookieWriter = {
     set: (name: string, value: string) => void;
 };
+
+export type CookieJar = CookieReader & CookieWriter;
 
 export class JSONCookieCodec {
     underlying: CookieJar;
@@ -41,8 +46,9 @@ export class WebsiteData {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     jsonCookie: any;
 
-    constructor(websiteID: string, cookies: CookieJar) {
-        const existing = new JSONCookieCodec(cookies).get(JSON_COOKIE_NAME);
+    constructor(websiteID: string, cookies: CookieReader) {
+        const codec = new JSONCookieCodec({ get: cookies.get, set: () => undefined });
+        const existing = codec.get(JSON_COOKIE_NAME);
         const jsonCookie = existing || { [JSON_COOKIE_VERSION_KEY]: SUPPORTED_JSON_COOKIE_VERSION };
 
         if (!jsonCookie[websiteID]) {
@@ -52,8 +58,9 @@ export class WebsiteData {
         this.jsonCookie = jsonCookie;
     }
 
-    save(cookies: CookieJar): void {
-        new JSONCookieCodec(cookies).set(JSON_COOKIE_NAME, this.jsonCookie);
+    save(cookies: CookieWriter): void {
+        const codec = new JSONCookieCodec({ get: () => "", set: cookies.set });
+        codec.set(JSON_COOKIE_NAME, this.jsonCookie);
     }
 
     isCompatible(): boolean {
@@ -118,4 +125,10 @@ export class WebsiteData {
         }
         this.jsonCookie[this.websiteID][key] = value;
     }
+}
+
+const OPTIN_COOKIE_NAME = "sg_optin";
+
+export function visitorHasOptedIn(cookies: CookieReader) {
+    return cookies.get(OPTIN_COOKIE_NAME) === "1";
 }

@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 ### Added
+- handle optin cookie
 - persist allocations in cookie, we want it stable even if config changes
 - improve the data driven SDK compatibility test suite
 ### Changed
