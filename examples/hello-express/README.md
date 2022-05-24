@@ -1,6 +1,8 @@
 # hello-express
 
-This is an example server built with https://expressjs.com
+This is an example server built with https://expressjs.com.
+
+It is a somewhat minimal example using the server side testing SDk.
 
 ## Dependencies
 
@@ -10,7 +12,6 @@ host and ports are used, modify as needed.
 ## Running
 
 ```shell
-export SSTSDK_WEBSITEID=4711
 export SSTSDK_CDNHOST=fake-cdn.localhost.test
 export SSTSDK_CDNPORT=3443
 npm run start

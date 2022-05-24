@@ -1,8 +1,12 @@
-const express = require('express');
-const cookieParser = require('cookie-parser')
-const sstsdk = require('@symplify-conversion/sst-sdk-nodejs');
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import sstsdk from '@symplify-conversion/sst-sdk-nodejs';
 
-const websiteID = process.env['SSTSDK_WEBSITEID'] || "4711";
+import { frontPageView } from './frontpage.js';
+import { contactView } from './contact.js';
+import { contactViewNew } from './contactNew.js';
+
+const websiteID = process.env['SSTSDK_WEBSITEID'] || "42";
 const cdnHost = process.env['SSTSDK_CDNHOST'] || "fake-cdn.localhost.test";
 const cdnPort = process.env['SSTSDK_CDNPORT'] || "3443"
 
@@ -28,30 +32,23 @@ function cookieJar(req, res) {
     }
 }
 
-function getDiscounts(req, res) {
+app.get('/', (_, res) => {
+    res.send(frontPageView())
+})
 
-    let discounts = [];
-
-    switch (sst.findVariation('discounts', cookieJar(req, res))) {
-        case 'large':
-            discounts.push(0.25);
+app.get('/contact', (req, res) => {
+    // the contact us view handler is selected based on a server side test
+    let contactViewVariant = contactView;
+    switch (sst.findVariation('Contact Page Refresh', cookieJar(req, res))) {
+        case 'New and Improved':
+            contactViewVariant = contactViewNew;
             break;
-        case 'small':
-            discounts.push(0.1);
-            break;
+        case 'Original':
+        default:
+            // we already selected the default view with the let declaration above
     }
-
-    return discounts;
-}
-
-app.get('/products/:sku', (req, res) => {
-
-    const discounts = getDiscounts(req, res);
-
-    res.send(`
-        <h2> ${req.params.sku} </h2>
-        <p> Price: $10${discounts.length == 0 ? '' : discounts.map(d => `, <span class="rebate">${d * 100}% off</span>`)} </p>
-    `);
+    const html = contactViewVariant();
+    res.send(html);
 })
 
 app.listen(port, () => {

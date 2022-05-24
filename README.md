@@ -21,15 +21,21 @@ npm i @symplify-conversion/sst-sdk-nodejs
 
 ## Usage
 
-```js
-// ...
+See [the examples directory](./examples/) for full code examples, the snippets
+below have been extracted from the surrounding app code for brevity.
 
-// When initializing your server, setup the SDK
+```js
+// You need to import the SDK, of course.
 const sstsdk = require('@symplify-conversion/sst-sdk-nodejs');
+
+// The SDK should be setup once in a long runnning server, e.g. on startup with
+// your other dependecies.
 const sst = new sstsdk(process.env['SSTSDK_WEBSITEID']);
 
-// We need a "CookieJar" to manage visitor state,
-// this example uses express with the cookie-parser lib.
+// To manage persistent allocations, the SDK needs to read and write cookies.
+// Each web framework has a different way to get this functionality.
+// `cookieJar` is one way to make an adapter for using the SDK with the express
+// and cookie-parser libraries.
 function cookieJar(req, res) {
     return {
         get: (name) => req.cookies[name],
@@ -37,29 +43,29 @@ function cookieJar(req, res) {
     }
 }
 
-// ...
-
+// `getDiscounts` is a helper called by handlers in this example
 function getDiscounts(req, res) {
 
-    let discounts = [];
-
-    switch (sst.findVariation('discounts', cookieJar(req, res))) {
+    // When you want to select different code paths based on variations in an
+    // A/B test, call `findVariation` (which needs the cookies adapter).
+    switch (sst.findVariation('Discounts, May 2022', cookieJar(req, res))) {
         case 'huge':
-            discounts.push(0.25);
-            break;
+            return [0.25];
         case 'small':
-            discounts.push(0.1);
-            break;
+            return [0.1];
     }
 
-    return discounts;
+    // Always have a fall back. `findVariation` returns null if the visitor was
+    // not allocated. The example project also has a variation named 'Original'
+    // which we let fall through here.
+    return [];
 }
 
-// ...
-
+// In this imagined example, we assume views.productPage renders the HTML for
+// a product details page, and shows any available discounts.
 app.get('/products/:sku', (req, res) => {
     const discounts = getDiscounts(req, res);
-    showProductPage(req, res, discounts);
+    res.send(views.productPage(sku, discounts));
 })
 ```
 

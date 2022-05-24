@@ -1,7 +1,8 @@
 {
   "scripts": {
-    "start": "node index.js"
+    "start": "node app.js"
   },
+  "type": "module",
   "dependencies": {
     "@symplify-conversion/sst-sdk-nodejs": "file:../../lib",
     "cookie-parser": "^1.4.6",
