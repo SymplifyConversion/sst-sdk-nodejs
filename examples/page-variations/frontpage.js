@@ -1,4 +1,4 @@
-import { footer, head, scriptLinks } from "./components.js";
+import { footer, head, scriptLinks, testInfo } from "./components.js";
 import { navbar } from "./navbar.js";
 
 export function frontPageView() {
@@ -21,6 +21,11 @@ ${navbar("Home")}
         <a class="btn btn-primary btn-lg" href="/contact" role="button">Learn more &raquo;</a>
       </p>
     </div>
+  </div>
+  <div class="container">
+    <h2>Test Info</h2>
+    ${testInfo()}
+    <hr>
   </div>
 </main>
 ${footer()}

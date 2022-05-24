@@ -1,4 +1,4 @@
-import { footer, head, scriptLinks } from "./components.js";
+import { footer, head, scriptLinks, testInfo } from "./components.js";
 import { navbar } from "./navbar.js";
 
 export function contactView() {
@@ -10,7 +10,8 @@ ${head("Example App - Contact Us")}
 ${navbar("Contact Us")}
 <main role="main">
   <div class="container">
-    <h1 class="text-warning">Contact Us</h1>
+    <h1 class="text-warning">Contact Us <small class="text-muted">(old)</small></h1>
+    ${testInfo()}
     <p>We want to know what you think.</p>
   </div>
   <div class="container">

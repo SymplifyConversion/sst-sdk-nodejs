@@ -4,6 +4,7 @@ import sstsdk from '@symplify-conversion/sst-sdk-nodejs';
 
 import { frontPageView } from './frontpage.js';
 import { contactView } from './contact.js';
+import { contactViewNew } from './contactNew.js';
 
 const websiteID = process.env['SSTSDK_WEBSITEID'] || "42";
 const cdnHost = process.env['SSTSDK_CDNHOST'] || "fake-cdn.localhost.test";
@@ -36,7 +37,18 @@ app.get('/', (_, res) => {
 })
 
 app.get('/contact', (req, res) => {
-    res.send(contactView());
+    // the contact us view handler is selected based on a server side test
+    let contactViewVariant = contactView;
+    switch (sst.findVariation('Contact Page Refresh', cookieJar(req, res))) {
+        case 'New and Improved':
+            contactViewVariant = contactViewNew;
+            break;
+        case 'Original':
+        default:
+            // we already selected the default view with the let declaration above
+    }
+    const html = contactViewVariant();
+    res.send(html);
 })
 
 app.listen(port, () => {

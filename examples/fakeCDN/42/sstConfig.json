@@ -1,0 +1,15 @@
+{
+  "updated": 1651496828,
+  "privacy_mode": 0,
+  "projects": [
+    {
+      "id": 2002,
+      "name": "Contact Page Refresh",
+      "variations": [
+        { "id": 20021, "name": "Original", "weight": 50, "state": "active" },
+        { "id": 20022, "name": "New and Improved", "weight": 50, "state": "active" }
+      ],
+      "state": "active"
+    }
+  ]
+}

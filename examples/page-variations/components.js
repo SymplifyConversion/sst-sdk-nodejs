@@ -11,7 +11,23 @@ export function head(title) {
       padding-top: 3.5rem;
     }
   </style>
+  <script>
+    function clearSgCookiesAndReload() {
+        document.cookie = "sg_cookies=;Max-Age=0;";
+        document.location.reload();
+    }
+  </script>
 </head>
+`;
+}
+
+export function testInfo() {
+    return `
+<p class="text-muted">
+  The <a href="/contact">Contact Us</a> page has two variants, one of
+  which you will be randomly assigned (in an even distribution). You
+  can use the reload button in the top right to reset your allocation.
+</p>
 `;
 }
 
