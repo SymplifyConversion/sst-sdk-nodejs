@@ -1,8 +1,8 @@
 const express = require('express');
 const cookieParser = require('cookie-parser')
-const sstsdk = require('../../lib');
+const sstsdk = require('@symplify-conversion/sst-sdk-nodejs');
 
-const websiteID = process.env['SSTSDK_WEBSITEID'];
+const websiteID = process.env['SSTSDK_WEBSITEID'] || "4711";
 const cdnHost = process.env['SSTSDK_CDNHOST'] || "fake-cdn.localhost.test";
 const cdnPort = process.env['SSTSDK_CDNPORT'] || "3443"
 
@@ -10,6 +10,9 @@ const app = express();
 const port = 3000;
 app.use(cookieParser())
 
+// When instatiating the SDK we can override the default dependencies,
+// for this example we want to use a local fake CDN (see README.md),
+// and we want the SDK to log to the console instead of being silent.
 const overrides = {
     cdnBaseURL: `https://${cdnHost}:${cdnPort}`,
     log: console,
