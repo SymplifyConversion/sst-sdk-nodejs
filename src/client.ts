@@ -80,11 +80,15 @@ export class SymplifySDK {
     }
 
     /**
-     * Returns the id of the allocated variation in `projectID` for the given visitor.
+     * Returns the name of the allocated variation in the project called
+     * `projectName` for the current visitor. The current visitor is identified
+     * by our cookie, if they are unknown, a new ID is created and set in the
+     * cookie.
      *
      * @param projectName the name of the project to allocate in
      * @param cookies a delegate for reading and writing request cookies
-     * @returns the name of the allocated variation, or null if none was allocated
+     * @returns the name of the allocated variation, or null if none was
+     * allocated
      */
     public findVariation(projectName: string, cookies: CookieJar): string | null {
         if (this.config.latest === null) {
