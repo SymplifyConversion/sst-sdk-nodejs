@@ -29,8 +29,21 @@ export type Environment = {
 export class Audience {
     ast: AST;
 
-    constructor(json: string) {
-        this.ast = JSON.parse(json);
+    /**
+     * Create a new Audience with the given rules.
+     *
+     * @throws AudienceError if the rules are invalid
+     * @param rules JSON string describing the audience rules, see docs/Audience.md
+     */
+    constructor(rules: string) {
+        let ast: AST;
+        try {
+            ast = JSON.parse(rules);
+        } catch (x) {
+            throw { message: "rules syntax error" };
+        }
+        checkSyntax(ast);
+        this.ast = ast;
     }
 
     /**
@@ -86,6 +99,44 @@ export class Audience {
             return { message: `error applying primitive ${head}` };
         }
     }
+}
+
+function checkSyntax(ast: AST): void {
+    switch (typeof ast) {
+        case "object":
+            if (ast instanceof Array) {
+                checkSyntaxInner(ast);
+            }
+            return;
+    }
+    throw { message: "AST root must be a list" };
+}
+
+function checkSyntaxInner(ast: AST): void {
+    switch (typeof ast) {
+        case "number":
+            return;
+        case "string":
+            return;
+        case "boolean":
+            return;
+        case "object":
+            if (ast instanceof Array) {
+                const car = ast[0];
+                if (typeof car != "string") {
+                    throw { message: `can only apply strings, ${car} is not a string` };
+                }
+                if (!primitives[car]) {
+                    throw { message: `${car} is not a primitive` };
+                }
+                const cdr = ast.slice(1);
+                for (const elem of cdr) {
+                    checkSyntaxInner(elem);
+                }
+                return;
+            }
+    }
+    throw { message: `rules syntax error at ${JSON.stringify(ast)}` };
 }
 
 function stringFun(a: Atom, b: Atom, op: (x: string, y: string) => Atom): AudienceError | Atom {
