@@ -15,6 +15,13 @@ function testIs(exprJSON: string, expected: Atom | AudienceError) {
     });
 }
 
+describe("Audience validation", () => {
+    expect(() => new Audience("[")).toThrow("rules syntax error");
+    expect(() => new Audience("false")).toThrow("AST root must be a list");
+    expect(() => new Audience('["goober"]')).toThrow("goober is not a primitive");
+    expect(() => new Audience("[true]")).toThrow("can only apply strings");
+});
+
 describe("Audience string primitives", () => {
     testIs('["equals", "", ""]', true);
     testIs('["equals", "foo", ""]', false);
