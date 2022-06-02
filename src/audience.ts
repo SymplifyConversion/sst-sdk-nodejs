@@ -1,15 +1,31 @@
+//
+// See Audience.md in docs/
+//
+
+/**
+ * Evaluating an audience can yield a runtime error.
+ */
 export type AudienceError = {
     message: string;
 };
 
+/**
+ * The rules syntax is a subset of JSON.
+ */
+export type AST = Atom | List;
 export type Atom = string | number | boolean;
 export type List = Array<List | Atom>;
-export type AST = Atom | List;
 
+/**
+ * The environment is passed in from the outside when evaluating rules
+ */
 export type Environment = {
     attributes: Record<string, Atom>;
 };
 
+/**
+ * Audience contains rules to be evaluated for activating projects.
+ */
 export class Audience {
     ast: AST;
 
@@ -17,6 +33,10 @@ export class Audience {
         this.ast = JSON.parse(json);
     }
 
+    /**
+     * eval interprets the rules in the given environment, and returns true if
+     * the audience matches.
+     */
     eval(env: Environment): boolean | AudienceError {
         const result = this.evalAst(this.ast, env);
 
@@ -31,7 +51,7 @@ export class Audience {
         return result;
     }
 
-    evalAst(ast: AST, env: Environment): Atom | AudienceError {
+    private evalAst(ast: AST, env: Environment): Atom | AudienceError {
         switch (typeof ast) {
             case "number":
                 return ast;
@@ -47,7 +67,7 @@ export class Audience {
         return { message: `cannot evaluate ${ast}` };
     }
 
-    evalApply(head: string, args: List, env: Environment): Atom | AudienceError {
+    private evalApply(head: string, args: List, env: Environment): Atom | AudienceError {
         const prim = primitives[head];
         if (!prim) {
             return { message: `${head} is not a primitive` };
