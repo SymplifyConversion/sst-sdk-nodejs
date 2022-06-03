@@ -13,7 +13,11 @@ function testIs(
     expected: Atom | AudienceError,
     attributes: Record<string, Atom> = {},
 ) {
-    const desc = `${exprJSON} with ${JSON.stringify(attributes)}  should be ${JSON.stringify(expected)}`;
+    let attrDesc = "";
+    if (0 < Object.keys(attributes).length) {
+        attrDesc = ` with ${JSON.stringify(attributes)}`;
+    }
+    const desc = `${exprJSON}${attrDesc} should be ${JSON.stringify(expected)}`;
     test(desc, () => {
         expect(evalAudience(exprJSON, attributes)).toStrictEqual(expected);
     });
