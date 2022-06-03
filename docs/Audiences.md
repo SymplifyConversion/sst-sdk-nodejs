@@ -43,10 +43,12 @@ project variation.
 Here are some examples to illustrate.
 
 This audience is true if the string attribute `urlPath` contains the string
-"contact" and also the string attribute `country` is "Sweden":
+"contact" and also the string attribute `country` is "Sweden" and the
+`bonusPoints` number attribute is at least 1000:
 
 ```JSON
 ["all",
+  [">=", ["number-attribute", "bonusPoints"], 1000],
   ["contains", ["string-attribute", "urlPath"], "contact"],
   ["equals", ["string-attribute", "country"], "Sweden"]]
 ```

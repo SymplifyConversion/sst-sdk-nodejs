@@ -1,17 +1,21 @@
 import { Atom, Audience, AudienceError } from "../src/audience";
 
-function evalAudience(json: string): boolean | AudienceError {
-    return new Audience(json).eval({ attributes: {} });
+function evalAudience(json: string, attributes: Record<string, Atom>): boolean | AudienceError {
+    return new Audience(json).eval({ attributes });
 }
 
 function error(message: string): AudienceError {
     return { message };
 }
 
-function testIs(exprJSON: string, expected: Atom | AudienceError) {
-    const desc = `${exprJSON} should be ${JSON.stringify(expected)}`;
+function testIs(
+    exprJSON: string,
+    expected: Atom | AudienceError,
+    attributes: Record<string, Atom> = {},
+) {
+    const desc = `${exprJSON} with ${JSON.stringify(attributes)}  should be ${JSON.stringify(expected)}`;
     test(desc, () => {
-        expect(evalAudience(exprJSON)).toStrictEqual(expected);
+        expect(evalAudience(exprJSON, attributes)).toStrictEqual(expected);
     });
 }
 
@@ -105,4 +109,43 @@ describe("Audience nested expressions", () => {
     testIs('["any", ["not", true], ["equals", "foo", "bar"], ["==", 1, 1]]', true);
     testIs('["any", ["not", false], ["equals", "foo", "bar"], ["==", 1, 2]]', true);
     testIs('["any", ["not", true], ["equals", "foo", "foo"], ["==", 1, 2]]', true);
+});
+
+describe("Audience docs example expressions", () => {
+    const allExpr = `
+        ["all",
+          [">=", ["number-attribute", "bonusPoints"], 1000],
+          ["contains", ["string-attribute", "urlPath"], "contact"],
+          ["equals", ["string-attribute", "country"], "Sweden"]]`;
+    const anyExpr = `
+        ["any",
+          ["bool-attribute", "preview"],
+          ["equals", ["string-attribute", "environment"], "staging"]]`;
+
+    testIs(allExpr, true, { bonusPoints: 1000, urlPath: "/contact", country: "Sweden" });
+    testIs(allExpr, false, { bonusPoints: 999, urlPath: "/contact", country: "Sweden" });
+    testIs(allExpr, false, { bonusPoints: 1000, urlPath: "/contact", country: "Norway" });
+    testIs(allExpr, false, { bonusPoints: 1000, urlPath: "/home", country: "Sweden" });
+
+    testIs(allExpr, error("'bonusPoints' is not a number"), {
+        urlPath: "/home",
+        country: "Sweden",
+    });
+    testIs(allExpr, error("'urlPath' is not a string"), {
+        bonusPoints: 0,
+        country: "xyz",
+    });
+    testIs(allExpr, error("'country' is not a string"), {
+        bonusPoints: 0,
+        urlPath: "/home",
+    });
+
+    testIs(anyExpr, true, { preview: true, environment: "production" });
+    testIs(anyExpr, true, { preview: false, environment: "staging" });
+    testIs(anyExpr, error("'preview' is not a boolean"), {
+        environment: "staging",
+    });
+    testIs(anyExpr, error("'environment' is not a string"), {
+        preview: true,
+    });
 });
