@@ -95,9 +95,9 @@
     "test_project_name": "test project",
     "expect_variation_match": "active variation 2",
     "expect_sg_cookie_properties_match": {
-      "10001/1001_ch": "1",
-      "10001/1001": "[10013]",
-      "10001/aud_p": "[1001]"
+      "10001/1001_ch": 1,
+      "10001/1001": [10013],
+      "10001/aud_p": [1001]
     }
   },
   {
@@ -118,7 +118,7 @@
     "test_project_name": "no allocations",
     "expect_variation_match": null,
     "expect_sg_cookie_properties_match": {
-      "10001/1003_ch": "-1"
+      "10001/1003_ch": -1
     }
   },
   {
@@ -164,9 +164,9 @@
     "test_project_name": "test project",
     "expect_variation_match": "active variation 2",
     "expect_sg_cookie_properties_match": {
-      "10001/1001_ch": "1",
-      "10001/1001": "[10013]",
-      "10001/aud_p": "[1001]"
+      "10001/1001_ch": 1,
+      "10001/1001": [10013],
+      "10001/aud_p": [1001]
     }
   }
 ]

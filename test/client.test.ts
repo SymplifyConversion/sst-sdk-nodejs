@@ -25,10 +25,15 @@ describe("SymplifySDK client", () => {
 
             const sgCookies = JSON.parse(decodeURIComponent(cookies.get("sg_cookies") || "{}"));
 
-            for (const [keypath, regex] of Object.entries(t.expect_sg_cookie_properties_match)) {
-                const reCookie = new RegExp(regex as string);
+            for (const [keypath, expected] of Object.entries(t.expect_sg_cookie_properties_match)) {
                 const leaf = keypath.split("/").reduce((acc, p) => (acc || {})[p], sgCookies);
-                expect("" + (leaf || "null")).toMatch(reCookie);
+                if (typeof expected == "string") {
+                    const reCookie = new RegExp(expected);
+                    expect(leaf || "null").toMatch(reCookie);
+                } else {
+                    // ?? is for undefined
+                    expect(leaf ?? null).toStrictEqual(expected);
+                }
             }
 
             const reVariation = new RegExp(t.expect_variation_match);
