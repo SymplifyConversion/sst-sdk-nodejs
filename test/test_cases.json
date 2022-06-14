@@ -126,7 +126,7 @@
     "sdk_config": "sdk_config.json",
     "website_id": "10001",
     "cookies": {
-      "sg_cookies": "{%2210001%22:{%221001_ch%22:-1%2C%22visid%22:%22goober%22}%2C%22_g%22:1}"
+      "sg_cookies": "{%2210001%22:{%221001_ch%22:-1%2C%22visid%22:%22foobar%22}%2C%22_g%22:1}"
     },
     "test_project_name": "test project",
     "expect_variation_match": null,
