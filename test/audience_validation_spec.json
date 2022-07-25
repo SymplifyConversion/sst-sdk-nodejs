@@ -11,10 +11,6 @@
         "expect_error": "AST root must be a list"
       },
       {
-        "audience_string": "[\"goober\"]",
-        "expect_error": "goober is not a primitive"
-      },
-      {
         "audience_string": "[true]",
         "expect_error": "can only apply strings"
       }

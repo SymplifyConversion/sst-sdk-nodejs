@@ -81,6 +81,8 @@ export class Audience {
     }
 
     private evalApply(head: string, args: List, env: Environment): Atom | AudienceError {
+        // TODO(Fabian) we have some extensibility in mind for primitives,
+        // might want to rephrase this or refactor where the lookup is.
         const prim = primitives[head];
         if (!prim) {
             return { message: `${head} is not a primitive` };
@@ -126,6 +128,8 @@ function checkSyntaxInner(ast: AST): void {
                 if (typeof car != "string") {
                     throw { message: `can only apply strings, ${car} is not a string` };
                 }
+                // TODO(Fabian) not sure yet if we want to test this statically,
+                // we have some extensibility in mind with regards to callable functions.
                 if (!primitives[car]) {
                     throw { message: `${car} is not a primitive` };
                 }
