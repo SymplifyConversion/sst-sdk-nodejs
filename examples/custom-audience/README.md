@@ -1,8 +1,9 @@
-# hello-express
+# custom-audience
 
 This is an example server built with https://expressjs.com.
 
-It is a somewhat minimal example using the server side testing SDK.
+It is a somewhat minimal example using the server side testing SDK with a custom
+audience.
 
 ## Dependencies
 
@@ -19,13 +20,16 @@ npm run start
 ```
 
 ```shell
-watch curl --silent http://localhost:3000/products/1337
+watch curl --silent 'http://localhost:3000/hello?lang=en'
 ```
 
 The curl output will start to vary as soon as the sst configuration has been loaded.
 
+Passing any `lang` parameter other than "en" makes the custom audience not
+match, meaning you should not see any variation.
+
 You can test it with cookies as well, to see the consistent variation allocation:
 
 ```shell
-watch curl --silent --cookie cookies.curl.txt --cookie-jar cookies.curl.txt http://localhost:3000/products/1337
+watch curl --silent --cookie cookies.curl.txt --cookie-jar cookies.curl.txt 'http://localhost:3000/hello?lang=en'
 ```
