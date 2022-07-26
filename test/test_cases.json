@@ -108,8 +108,7 @@
       "sg_cookies": "{%2210001%22:{%221003%22:[10032]%2C%221003_ch%22:1%2C%22aud_p%22:[1003]%2C%22visid%22:%22a_visitor%22}%2C%22_g%22:1}"
     },
     "test_project_name": "no allocations",
-    "expect_variation_match": "Variation 1",
-    "expect_sg_cookie_properties_match": {}
+    "expect_variation_match": "Variation 1"
   },
   {
     "test_name": "persist null allocation",
@@ -129,8 +128,7 @@
       "sg_cookies": "{%2210001%22:{%221001_ch%22:-1%2C%22visid%22:%22foobar%22}%2C%22_g%22:1}"
     },
     "test_project_name": "test project",
-    "expect_variation_match": null,
-    "expect_sg_cookie_properties_match": {}
+    "expect_variation_match": null
   },
   {
     "test_name": "cookie allocated but inactive project",
@@ -140,8 +138,7 @@
       "sg_cookies": "{%2210001%22:{%221004%22:[10042]%2C%221004_ch%22:1%2C%22aud_p%22:[1004]%2C%22visid%22:%22a_visitor%22}%2C%22_g%22:1}"
     },
     "test_project_name": "paused project",
-    "expect_variation_match": null,
-    "expect_sg_cookie_properties_match": {}
+    "expect_variation_match": null
   },
   {
     "test_name": "bail out if privacy mode 2 and no opt-in",
@@ -168,5 +165,25 @@
       "10001/1001": [10013],
       "10001/aud_p": [1001]
     }
+  },
+  {
+    "test_name": "false audience gives no variation",
+    "sdk_config": "sdk_config.json",
+    "website_id": "10001",
+    "test_project_name": "custom audience",
+    "audience_attributes": {
+        "foo": "baz"
+    },
+    "expect_variation_match": null
+  },
+  {
+    "test_name": "true audience gives a variation",
+    "sdk_config": "sdk_config.json",
+    "website_id": "10001",
+    "test_project_name": "custom audience",
+    "audience_attributes": {
+        "foo": "bar"
+    },
+    "expect_variation_match": "Original"
   }
 ]

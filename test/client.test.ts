@@ -20,12 +20,17 @@ describe("SymplifySDK client", () => {
 
             const sdk = new SymplifySDK(t.website_id, { httpGET });
             await sdk.ready;
-            const variation = sdk.findVariation(t.test_project_name, cookies);
+            const variation = sdk.findVariation(
+                t.test_project_name,
+                cookies,
+                t.audience_attributes,
+            );
             sdk.stop();
 
             const sgCookies = JSON.parse(cookies.get("sg_cookies") || "{}");
 
-            for (const [keypath, expected] of Object.entries(t.expect_sg_cookie_properties_match)) {
+            const checkCookieProps = t.expect_sg_cookie_properties_match || {};
+            for (const [keypath, expected] of Object.entries(checkCookieProps)) {
                 const leaf = keypath.split("/").reduce((acc, p) => (acc || {})[p], sgCookies);
                 if (typeof expected == "string") {
                     const reCookie = new RegExp(expected);
