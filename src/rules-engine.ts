@@ -40,7 +40,7 @@ export function parse(rules: string, primitives: string[]): AST | RulesEngineErr
         if (isError(e)) {
             return e;
         }
-        throw e;
+        return { message: `unexpected error checking AST: ${e}` };
     }
 
     return ast;
