@@ -1,6 +1,6 @@
 import { NullLogger } from "../src/logger";
 import { doesAudienceApply, parseConfigJSON, ProjectConfig, restoreAudience } from "../src/project";
-import { AST } from "../src/rules-engine";
+import { List } from "../src/rules-engine";
 
 describe("SymplifyConfig", () => {
     test("can parse plain JSON", () => {
@@ -77,7 +77,7 @@ const CONFIG_JSON_WITH_UTF8_BOM = "\xEF\xBB\xBF" + CONFIG_JSON;
 
 const CONFIG_JSON_WITH_UTF16_BOM = "\uFEFF" + CONFIG_JSON;
 
-function testConfig(audience_rules?: AST): ProjectConfig {
+function testConfig(audience_rules?: List): ProjectConfig {
     return {
         id: 9999,
         name: "test project please ignore",

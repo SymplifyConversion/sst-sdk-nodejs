@@ -1,9 +1,9 @@
 /**
  * The rules syntax is a subset of JSON.
  */
-export type AST = Atom | List;
+export type Expr = Atom | List;
 export type Atom = string | number | boolean;
-export type List = Array<List | Atom>;
+export type List = Array<Expr>;
 
 /**
  * Evaluating rules can yield a runtime error.
@@ -25,8 +25,8 @@ export type Environment = {
  */
 export type PrimitiveFn = (args: Atom[], env: Environment) => Atom | RulesEngineError;
 
-export function parse(rules: string, primitives: string[]): AST | RulesEngineError {
-    let ast: AST;
+export function parse(rules: string, primitives: string[]): Expr | RulesEngineError {
+    let ast;
     try {
         ast = JSON.parse(rules);
     } catch (x) {
@@ -34,30 +34,33 @@ export function parse(rules: string, primitives: string[]): AST | RulesEngineErr
     }
 
     try {
-        checkSyntax(ast, primitives);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (e: any) {
+        if (checkSyntax(ast, primitives)) {
+            return ast;
+        }
+        // we should never get a false result, but this satisfies the compiler
+        return { message: "error in syntax checker" };
+    } catch (e) {
         if (isError(e)) {
             return e;
         }
-        return { message: `unexpected error checking AST: ${e}` };
+        return { message: `unexpected error checking AST: ${JSON.stringify(e)}` };
     }
-
-    return ast;
 }
 
-export function checkSyntax(ast: AST, primitives: string[]): void {
-    switch (typeof ast) {
-        case "object":
-            if (ast instanceof Array) {
-                checkSyntaxInner(ast, primitives);
-            }
-            return;
-    }
-    throw { message: "AST root must be a list" };
+export function isList(ast: Expr): ast is List {
+    return Array.isArray(ast);
 }
 
-function checkSyntaxInner(ast: AST, primitives: string[]): void {
+export function checkSyntax(ast: unknown, primitives: string[]): ast is Expr {
+    checkSyntaxInner(ast, primitives);
+
+    // Since there can be different reasons for the AST being invalid we use
+    // exceptions instead of proper true | false branches. This lets us capture
+    // messages in the caller.
+    return true;
+}
+
+function checkSyntaxInner(ast: unknown, primitives: string[]): void {
     switch (typeof ast) {
         case "number":
             return;
@@ -65,27 +68,28 @@ function checkSyntaxInner(ast: AST, primitives: string[]): void {
             return;
         case "boolean":
             return;
-        case "object":
-            if (ast instanceof Array) {
-                const car = ast[0];
-                if (typeof car != "string") {
-                    throw { message: `can only apply strings, ${car} is not a string` };
-                }
-                if (primitives.indexOf(car) < 0) {
-                    throw { message: `${car} is not a primitive` };
-                }
-                const cdr = ast.slice(1);
-                for (const elem of cdr) {
-                    checkSyntaxInner(elem, primitives);
-                }
-                return;
-            }
     }
+
+    if (Array.isArray(ast)) {
+        const car = ast[0];
+        if (typeof car != "string") {
+            throw { message: `can only apply strings, ${car} is not a string` };
+        }
+        if (primitives.indexOf(car) < 0) {
+            throw { message: `${car} is not a primitive` };
+        }
+        const cdr = ast.slice(1);
+        for (const elem of cdr) {
+            checkSyntaxInner(elem, primitives);
+        }
+        return;
+    }
+
     throw { message: `rules syntax error at ${JSON.stringify(ast)}` };
 }
 
-export function evalAst(
-    ast: AST,
+export function evaluate(
+    ast: Expr,
     env: Environment,
     primitives: Record<string, PrimitiveFn>,
 ): Atom | RulesEngineError {
@@ -117,7 +121,7 @@ function evalApply(
     try {
         const evaledArgs: Atom[] = [];
         for (const arg of args) {
-            const a = evalAst(arg, env, primitives);
+            const a = evaluate(arg, env, primitives);
             if (isError(a)) {
                 return a;
             }

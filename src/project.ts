@@ -1,7 +1,7 @@
 import { Audience } from "./audience";
 import { hashInWindow } from "./hash";
 import { Logger } from "./logger";
-import { AST, isError } from "./rules-engine";
+import { List, isError } from "./rules-engine";
 
 export type ProjectState = "paused" | "active";
 
@@ -25,7 +25,7 @@ export type ProjectConfig = {
     name: string;
     variations: VariationConfig[];
     state: ProjectState;
-    audience_rules?: AST;
+    audience_rules?: List;
     audience?: Audience;
 };
 
