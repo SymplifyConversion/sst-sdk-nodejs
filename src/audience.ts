@@ -3,11 +3,12 @@
 //
 
 import {
-    AST,
     Atom,
     Environment,
-    evalAst,
+    evaluate,
     isError,
+    isList,
+    List,
     parse,
     PrimitiveFn,
     RulesEngineError,
@@ -19,7 +20,7 @@ type AudienceError = RulesEngineError;
  * Audience contains rules to be evaluated for activating projects.
  */
 export class Audience {
-    rules: AST;
+    rules: List;
 
     /**
      * Create a new Audience with the given rules.
@@ -34,6 +35,10 @@ export class Audience {
             throw result;
         }
 
+        if (!isList(result)) {
+            throw { message: "AST root must be a list" };
+        }
+
         this.rules = result;
     }
 
@@ -42,7 +47,7 @@ export class Audience {
      * the audience matches.
      */
     eval(env: Environment): boolean | AudienceError {
-        const result = evalAst(this.rules, env, primitives);
+        const result = evaluate(this.rules, env, primitives);
 
         if (isError(result)) {
             return result;
