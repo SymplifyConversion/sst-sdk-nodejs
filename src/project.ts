@@ -1,4 +1,4 @@
-import { djb2 } from "./hash";
+import { hashInWindow } from "./hash";
 
 export type ProjectState = "paused" | "active";
 
@@ -50,12 +50,8 @@ export function findVariationForVisitor(
         return null;
     }
 
-    const totalWeight = 100;
-
     const hashKey = `${visitorID}:${project.id}`;
-    let hash = djb2(hashKey);
-    hash /= 4_294_967_295; // unsigned max
-    hash *= totalWeight; // fit window
+    const hash = hashInWindow(hashKey, 100);
 
     let pointer = 0;
     for (const variation of project.variations) {
