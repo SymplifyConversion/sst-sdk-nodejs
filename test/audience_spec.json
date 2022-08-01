@@ -1,0 +1,101 @@
+[
+  {
+    "suite_name": "string primitives",
+    "test_cases": [
+      { "audience_json": ["equals", "", ""], "expect_result": true },
+      { "audience_json": ["equals", "foo", ""], "expect_result": false },
+      { "audience_json": ["equals", "", "bar"], "expect_result": false },
+      { "audience_json": ["equals", "foo", "foo"], "expect_result": true },
+      { "audience_json": ["equals", "foo", "bar"], "expect_result": false },
+      { "audience_json": ["contains", "foo", ""], "expect_result": true },
+      { "audience_json": ["contains", "", "foo"], "expect_result": false },
+      { "audience_json": ["contains", "foo", "o"], "expect_result": true },
+      { "audience_json": ["contains", "foo", "a"], "expect_result": false },
+      { "audience_json": ["matches", "foo", ""], "expect_result": true },
+      { "audience_json": ["matches", "", "foo"], "expect_result": false },
+      { "audience_json": ["matches", "foo", "(bar|foo)"], "expect_result": true },
+      { "audience_json": ["matches", "foo", "aa*"], "expect_result": false },
+
+      { "audience_json": ["matches", 2, "2"], "expect_error": "expected string arguments" },
+      { "audience_json": ["equals", "", false], "expect_error": "expected string arguments" },
+      { "audience_json": ["contains", 4711, 1], "expect_error": "expected string arguments" }
+    ]
+  },
+  {
+    "suite_name": "number primitives",
+    "test_cases": [
+      { "audience_json": ["==", 4711, 1337], "expect_result": false },
+      { "audience_json": ["==", 1337, 1337], "expect_result": true },
+      { "audience_json": ["==", 42, 1337], "expect_result": false },
+
+      { "audience_json": ["<", 4711, 1337], "expect_result": false },
+      { "audience_json": ["<", 1337, 1337], "expect_result": false },
+      { "audience_json": ["<", 42, 1337], "expect_result": true },
+
+      { "audience_json": ["<=", 4711, 1337], "expect_result": false },
+      { "audience_json": ["<=", 1337, 1337], "expect_result": true },
+      { "audience_json": ["<=", 42, 1337], "expect_result": true },
+
+      { "audience_json": [">", 4711, 1337], "expect_result": true },
+      { "audience_json": [">", 1337, 1337], "expect_result": false },
+      { "audience_json": [">", 42, 1337], "expect_result": false },
+
+      { "audience_json": [">=", 4711, 1337], "expect_result": true },
+      { "audience_json": [">=", 1337, 1337], "expect_result": true },
+      { "audience_json": [">=", 42, 1337], "expect_result": false },
+
+      { "audience_json": ["==", 2, "2"], "expect_error": "expected number arguments" },
+      { "audience_json": ["<", "", false], "expect_error": "expected number arguments" },
+      { "audience_json": ["<=", 1, false], "expect_error": "expected number arguments" },
+      { "audience_json": [">", "fo", "ba"], "expect_error": "expected number arguments" },
+      { "audience_json": [">=", true, 1], "expect_error": "expected number arguments" }
+    ]
+  },
+  {
+    "suite_name": "boolean primitives",
+    "test_cases": [
+      { "audience_json": ["all"], "expect_result": true },
+      { "audience_json": ["all", true], "expect_result": true },
+      { "audience_json": ["all", true, true, true], "expect_result": true },
+      { "audience_json": ["all", false, true, true], "expect_result": false },
+      { "audience_json": ["all", true, false, true], "expect_result": false },
+      { "audience_json": ["all", true, true, false], "expect_result": false },
+
+      { "audience_json": ["any"], "expect_result": false },
+      { "audience_json": ["any", false], "expect_result": false },
+      { "audience_json": ["any", true, true, true], "expect_result": true },
+      { "audience_json": ["any", true, false, false], "expect_result": true },
+      { "audience_json": ["any", false, true, false], "expect_result": true },
+      { "audience_json": ["any", false, false, true], "expect_result": true },
+      { "audience_json": ["any", false, false, false], "expect_result": false },
+
+      { "audience_json": ["not", false], "expect_result": true },
+      { "audience_json": ["not", true], "expect_result": false },
+
+      { "audience_json": ["all", 2, "2"], "expect_error": "2 is not a boolean" },
+      { "audience_json": ["any", false, "foo"], "expect_error": "foo is not a boolean" },
+      { "audience_json": ["not", 1], "expect_error": "1 is not a boolean" }
+    ]
+  },
+  {
+    "suite_name": "nested expressions",
+    "test_cases": [
+      { "audience_json": ["all", ["all"]], "expect_result": true },
+      { "audience_json": ["all", ["any"]], "expect_result": false },
+      { "audience_json": ["any", ["any"], ["any"], ["all"]], "expect_result": true },
+      { "audience_json": ["any", ["any", ["any", ["all"]]]], "expect_result": true },
+      {
+        "audience_json": ["any", ["not", true], ["equals", "foo", "bar"], ["==", 1, 1]],
+        "expect_result": true
+      },
+      {
+        "audience_json": ["any", ["not", false], ["equals", "foo", "bar"], ["==", 1, 2]],
+        "expect_result": true
+      },
+      {
+        "audience_json": ["any", ["not", true], ["equals", "foo", "foo"], ["==", 1, 2]],
+        "expect_result": true
+      }
+    ]
+  }
+]

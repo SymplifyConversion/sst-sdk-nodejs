@@ -1,0 +1,19 @@
+[
+  {
+    "suite_name": "static expression validation",
+    "test_cases": [
+      {
+        "audience_string": "[",
+        "expect_error": "rules syntax error"
+      },
+      {
+        "audience_string": "false",
+        "expect_error": "AST root must be a list"
+      },
+      {
+        "audience_string": "[true]",
+        "expect_error": "can only apply strings"
+      }
+    ]
+  }
+]
