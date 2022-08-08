@@ -1,5 +1,5 @@
 import { WebsiteData } from "../src/cookies";
-import { ProjectState } from "../src/project";
+import { ProjectConfig, ProjectState, VariationConfig } from "../src/project";
 import { makeCookieJar } from "./helpers";
 
 describe("WebsiteData", () => {
@@ -40,7 +40,7 @@ describe("WebsiteData", () => {
         data.setVisitorID("goober");
         data.rememberAllocation(testProject, testVar);
         data.save(cookies);
-        expect(JSON.parse(decodeURIComponent(cookies.get("sg_cookies")))).toStrictEqual({
+        expect(JSON.parse(cookies.get("sg_cookies"))).toStrictEqual({
             "4711": {
                 "1337": [42],
                 "1337_ch": 1,
@@ -49,5 +49,43 @@ describe("WebsiteData", () => {
             },
             _g: 1,
         });
+    });
+
+    test("can set expires attribute", () => {
+        const cookies = makeCookieJar();
+        const data = new WebsiteData("4711", cookies);
+        data.save(cookies);
+        expect(cookies.getExpiresIn("sg_cookies")).toBe(90);
+    });
+
+    test("assumes the cookie is already decoded when reading it", () => {
+        const cookieData = {
+            "4711": {
+                "1337": [42],
+                "1337_ch": 1,
+                aud_p: [1337],
+                visid: "goober%22",
+            },
+            _g: 1,
+        };
+        const testVar: VariationConfig = {
+            id: 42,
+            name: "a variation",
+            state: "active",
+            weight: 100,
+        };
+        const testProject: ProjectConfig = {
+            id: 1337,
+            name: "project",
+            variations: [testVar],
+            state: "active",
+        };
+
+        const cookies = makeCookieJar();
+        cookies.set("sg_cookies", JSON.stringify(cookieData), 1);
+        const data = new WebsiteData("4711", cookies);
+
+        expect(data.getVisitorID()).toBe("goober%22");
+        expect(data.getAllocation(testProject)).toStrictEqual(testVar);
     });
 });
