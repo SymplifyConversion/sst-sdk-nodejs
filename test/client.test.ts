@@ -15,7 +15,7 @@ describe("SymplifySDK client", () => {
             const configJSON = fs.readFileSync("test/" + t.sdk_config).toString();
             const httpGET = constantHTTP(configJSON);
             for (const [name, value] of Object.entries(t.cookies || {})) {
-                cookies.set(name, "" + value);
+                cookies.set(name, decodeURIComponent("" + value), 90);
             }
 
             const sdk = new SymplifySDK(t.website_id, { httpGET });
@@ -23,7 +23,7 @@ describe("SymplifySDK client", () => {
             const variation = sdk.findVariation(t.test_project_name, cookies);
             sdk.stop();
 
-            const sgCookies = JSON.parse(decodeURIComponent(cookies.get("sg_cookies") || "{}"));
+            const sgCookies = JSON.parse(cookies.get("sg_cookies") || "{}");
 
             for (const [keypath, expected] of Object.entries(t.expect_sg_cookie_properties_match)) {
                 const leaf = keypath.split("/").reduce((acc, p) => (acc || {})[p], sgCookies);

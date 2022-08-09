@@ -2,12 +2,19 @@ import { randomUUID } from "crypto";
 import { CookieJar } from "../src/cookies";
 import { findVariationForVisitor, ProjectConfig } from "../src/project";
 
-export function makeCookieJar(): CookieJar {
+type TestCookieJar = CookieJar & { getExpiresIn: (key: string) => number };
+
+export function makeCookieJar(): TestCookieJar {
     const cookies: Record<string, string> = {};
+    const expiresIn: Record<string, number> = {};
 
     return {
         get: (key: string) => cookies[key],
-        set: (key: string, val: string) => (cookies[key] = val),
+        set: (key: string, val: string, expireInDays: number) => {
+            cookies[key] = val;
+            expiresIn[key] = expireInDays;
+        },
+        getExpiresIn: (key: string) => expiresIn[key],
     };
 }
 

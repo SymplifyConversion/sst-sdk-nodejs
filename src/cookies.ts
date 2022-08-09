@@ -1,11 +1,21 @@
 import { ProjectConfig, VariationConfig } from "./project";
 
 export type CookieReader = {
+    /**
+     * Get the HTTP cookie from the current request with the given name.
+     * The result should be URL decoded from the browser request.
+     */
     get: (name: string) => string;
 };
 
 export type CookieWriter = {
-    set: (name: string, value: string) => void;
+    /**
+     * Set the HTTP cookie for the current response, with the given name, the given value.
+     * The expires field of the cookie must be `expireInDays` days from now.
+     * The domain field of the cookie should be the domain you run your test projects on.
+     * The cookie value should be URL encoded before reaching the browser.
+     */
+    set: (name: string, value: string, expireInDays: number) => void;
 };
 
 export type CookieJar = CookieReader & CookieWriter;
@@ -22,11 +32,11 @@ export class JSONCookieCodec {
         if (!rawCookie) {
             return null;
         }
-        return JSON.parse(decodeURIComponent(rawCookie));
+        return JSON.parse(rawCookie);
     }
 
     set(name: string, value: unknown) {
-        this.underlying.set(name, encodeURIComponent(JSON.stringify(value)));
+        this.underlying.set(name, JSON.stringify(value), 90);
     }
 }
 

@@ -7,8 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 ### Fixed
+- removed URI codec from cookie jar (should be handled outside SDK)
 - windowed hash function was not rounding correctly, add `ceil` call for compatibility
 ### Changed
+- add cookie expiry support
 - improved compatibility test suite
 - improved documentation
 

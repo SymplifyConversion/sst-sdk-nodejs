@@ -24,7 +24,11 @@ const sst = new sstsdk(websiteID, overrides);
 function cookieJar(req, res) {
     return {
         get: (name) => req.cookies[name],
-        set: (name, value) => res.cookie(name, value),
+        set: (name, value, expiresInDays) => {
+            const expiresInMillis = expiresInDays * 24 * 3600 * 1000;
+            const expires = new Date(Date.now() + expiresInMillis);
+            res.cookie(name, value, { expires });
+        },
     }
 }
 
@@ -51,6 +55,17 @@ app.get('/products/:sku', (req, res) => {
     res.send(`
         <h2> ${req.params.sku} </h2>
         <p> Price: $10${discounts.length == 0 ? '' : discounts.map(d => `, <span class="rebate">${d * 100}% off</span>`)} </p>
+    `);
+})
+
+app.get('/', (req, res) => {
+    const productCatalog = [1, 2, 3, 4, 5];
+
+    res.send(`
+        <h1> Fake Webshop </h1>
+        <ul>
+            ${productCatalog.map(sku => `<li><a href="/products/${sku}">product ${sku}</a></li>`).join('')}
+        </ul>
     `);
 })
 

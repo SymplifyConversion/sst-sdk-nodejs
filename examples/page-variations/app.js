@@ -28,7 +28,11 @@ const sst = new sstsdk(websiteID, overrides);
 function cookieJar(req, res) {
     return {
         get: (name) => req.cookies[name],
-        set: (name, value) => res.cookie(name, value),
+        set: (name, value, expiresInDays) => {
+            const expiresInMillis = expiresInDays * 24 * 3600 * 1000;
+            const expires = new Date(Date.now() + expiresInMillis);
+            res.cookie(name, value, { expires });
+        },
     }
 }
 
