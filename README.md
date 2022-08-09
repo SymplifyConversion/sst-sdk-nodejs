@@ -39,7 +39,6 @@ const sst = new sstsdk(process.env['SSTSDK_WEBSITEID']);
 function cookieJar(domain, req, res) {
     return {
         get: (name) => req.cookies[name],
-        set: (name, value) => res.cookie(name, value),
         set: (name, value, expiresInDays) => {
             const expires = new Date(Date.now() + expiresInDays * 24 * 3600 * 1000);
             res.cookie(name, value, { expires, domain });
