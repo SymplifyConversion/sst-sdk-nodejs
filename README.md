@@ -34,12 +34,16 @@ const sst = new sstsdk(process.env['SSTSDK_WEBSITEID']);
 
 // To manage persistent allocations, the SDK needs to read and write cookies.
 // Each web framework has a different way to get this functionality.
-// `cookieJar` is one way to make an adapter for using the SDK with the express
-// and cookie-parser libraries.
-function cookieJar(req, res) {
+// This function `cookieJar` is one way to make an adapter for using the SDK
+// when using the express and cookie-parser modules.
+function cookieJar(domain, req, res) {
     return {
         get: (name) => req.cookies[name],
         set: (name, value) => res.cookie(name, value),
+        set: (name, value, expiresInDays) => {
+            const expires = new Date(Date.now() + expiresInDays * 24 * 3600 * 1000);
+            res.cookie(name, value, { expires, domain });
+        },
     }
 }
 
@@ -48,7 +52,7 @@ function getDiscounts(req, res) {
 
     // When you want to select different code paths based on variations in an
     // A/B test, call `findVariation` (which needs the cookies adapter).
-    switch (sst.findVariation('Discounts, May 2022', cookieJar(req, res))) {
+    switch (sst.findVariation('Discounts, May 2022', cookieJar('.example.com', req, res))) {
         case 'huge':
             return [0.25];
         case 'small':

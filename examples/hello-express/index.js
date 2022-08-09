@@ -27,7 +27,7 @@ function cookieJar(req, res) {
         set: (name, value, expiresInDays) => {
             const expiresInMillis = expiresInDays * 24 * 3600 * 1000;
             const expires = new Date(Date.now() + expiresInMillis);
-            res.cookie(name, value, { expires });
+            res.cookie(name, value, { expires, domain: '.localhost.test' });
         },
     }
 }
