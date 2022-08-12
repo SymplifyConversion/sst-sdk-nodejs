@@ -3,6 +3,8 @@ import { CookieJar, visitorHasOptedIn, WebsiteData } from "./cookies";
 import { httpsGET } from "./http";
 import { Logger, NullLogger } from "./logger";
 import {
+    AudienceAttributes,
+    doesAudienceApply,
     findProjectWithName,
     findVariationForVisitor,
     parseConfigJSON,
@@ -87,10 +89,15 @@ export class SymplifySDK {
      *
      * @param projectName the name of the project to allocate in
      * @param cookies a delegate for reading and writing request cookies
+     * @param audienceAttributes custom attributes for audience evaluation
      * @returns the name of the allocated variation, or null if none was
      * allocated
      */
-    public findVariation(projectName: string, cookies: CookieJar): string | null {
+    public findVariation(
+        projectName: string,
+        cookies: CookieJar,
+        audienceAttributes: AudienceAttributes = {},
+    ): string | null {
         if (this.config.latest === null) {
             this.log.warn("findVariation before config was ready");
             return null;
@@ -134,6 +141,13 @@ export class SymplifySDK {
                 return currAllocation.name;
         }
 
+        // if we have not returned yet, we are about to make a decision about the visitor's allocation
+
+        if (!doesAudienceApply(project, audienceAttributes, this.log)) {
+            // if the audience does not apply, we will not persist any variation so don't need to do anything else here
+            return null;
+        }
+
         const visID = ensureVisitorID(siteData, this.idGenerator);
         if (!visID) {
             this.log.error("could not get or generate a visitor ID");
@@ -163,13 +177,17 @@ export class SymplifySDK {
         this.config.loading = true;
         return this.fetchConfig()
             .then((newCfg) => {
+                if (newCfg.updated <= (this.config.latest?.updated || 0)) {
+                    this.log.debug("config is up to date");
+                    return;
+                }
                 this.log.info(
-                    `config received: ${newCfg.projects.length} projects, updated: ${newCfg.updated}`,
+                    `config update received with ${newCfg.projects.length} projects, updated: ${newCfg.updated}`,
                 );
                 this.config.latest = newCfg;
             })
             .catch((reason) => {
-                this.log.error("config update failed: " + reason);
+                this.log.error("config update failed: " + JSON.stringify(reason));
             })
             .finally(() => {
                 this.config.loading = false;

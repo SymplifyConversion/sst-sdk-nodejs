@@ -1,0 +1,146 @@
+[
+  {
+    "suite_name": "attribute getters",
+    "audience_json": [
+      "any",
+      ["equals", ["string-attribute", "foo"], "bar"],
+      ["==", ["number-attribute", "number"], 4711],
+      ["bool-attribute", "yes"]
+    ],
+    "test_cases": [
+      {
+        "attributes": {
+          "foo": "bar",
+          "number": 4711,
+          "yes": true
+        },
+        "expect_result": true
+      },
+      {
+        "attributes": {
+          "foo": "bar",
+          "number": 0,
+          "yes": false
+        },
+        "expect_result": true
+      },
+      {
+        "attributes": {
+          "foo": "",
+          "number": 4711,
+          "yes": false
+        },
+        "expect_result": true
+      },
+      {
+        "attributes": {
+          "foo": "",
+          "number": 0,
+          "yes": true
+        },
+        "expect_result": true
+      },
+      {
+        "attributes": {},
+        "expect_error": "'foo' is not a string"
+      },
+      {
+        "attributes": {
+          "foo": ""
+        },
+        "expect_error": "'number' is not a number"
+      },
+      {
+        "attributes": {
+          "foo": "",
+          "number": 0
+        },
+        "expect_error": "'yes' is not a boolean"
+      }
+    ]
+  },
+  {
+    "suite_name": "docs example: 'any'",
+    "audience_json": [
+      "any",
+      ["bool-attribute", "preview"],
+      ["equals", ["string-attribute", "environment"], "staging"]
+    ],
+    "test_cases": [
+      {
+        "attributes": { "preview": true, "environment": "production" },
+        "expect_result": true
+      },
+      {
+        "attributes": { "preview": false, "environment": "staging" },
+        "expect_result": true
+      },
+      {
+        "attributes": { "preview": false, "environment": "production" },
+        "expect_result": false
+      },
+
+      {
+        "attributes": { "environment": "production" },
+        "expect_error": "'preview' is not a boolean"
+      },
+      {
+        "attributes": { "preview": false },
+        "expect_error": "'environment' is not a string"
+      }
+    ]
+  },
+  {
+    "suite_name": "docs example: 'all'",
+    "audience_json": [
+      "all",
+      [">=", ["number-attribute", "bonusPoints"], 1000],
+      ["contains", ["string-attribute", "urlPath"], "contact"],
+      ["equals", ["string-attribute", "country"], "Sweden"]
+    ],
+    "test_cases": [
+      {
+        "attributes": { "bonusPoints": 1000, "urlPath": "/contact", "country": "Sweden" },
+        "expect_result": true
+      },
+      {
+        "attributes": { "bonusPoints": 999, "urlPath": "/contact", "country": "Sweden" },
+        "expect_result": false
+      },
+      {
+        "attributes": { "bonusPoints": 1000, "urlPath": "/contact", "country": "Norway" },
+        "expect_result": false
+      },
+      {
+        "attributes": { "bonusPoints": 1000, "urlPath": "/home", "country": "Sweden" },
+        "expect_result": false
+      },
+
+      {
+        "attributes": {},
+        "expect_error": "'bonusPoints' is not a number"
+      },
+      {
+        "attributes": {
+          "urlPath": "/home",
+          "country": "Sweden"
+        },
+        "expect_error": "'bonusPoints' is not a number"
+      },
+      {
+        "attributes": {
+          "bonusPoints": 1000,
+          "country": "Sweden"
+        },
+        "expect_error": "'urlPath' is not a string"
+      },
+      {
+        "attributes": {
+          "bonusPoints": 1000,
+          "urlPath": "/home"
+        },
+        "expect_error": "'country' is not a string"
+      }
+    ]
+  }
+]

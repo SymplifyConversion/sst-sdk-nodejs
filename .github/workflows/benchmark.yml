@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Micro benchmarks
 
 on:
   push:
@@ -7,14 +7,11 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
-
+  bench:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
-        node-version: [14.x, 16.x]
-
+        node-version: [16.x]
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
@@ -23,6 +20,4 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
-    - run: npm run lint
-    - run: npm run build
-    - run: npm run test
+    - run: npm run bench

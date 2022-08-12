@@ -16,6 +16,7 @@ host and ports are used, modify as needed.
 ## Running
 
 ```shell
+npm install
 export SSTSDK_CDNHOST=fake-cdn.localhost.test
 export SSTSDK_CDNPORT=3443
 npm run start

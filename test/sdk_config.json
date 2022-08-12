@@ -38,6 +38,15 @@
         { "id": 10042, "name": "Variation 1", "weight": 0, "state": "paused" }
       ],
       "state": "paused"
+    },
+    {
+      "id": 1005,
+      "name": "custom audience",
+      "audience_rules": ["equals", ["string-attribute", "foo"], "bar"],
+      "variations": [
+        { "id": 10051, "name": "Original", "weight": 100, "state": "active" }
+      ],
+      "state": "active"
     }
   ]
 }

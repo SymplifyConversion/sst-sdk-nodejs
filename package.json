@@ -1,6 +1,6 @@
 {
   "name": "@symplify-conversion/sst-sdk-nodejs",
-  "version": "0.3.1-dev",
+  "version": "0.4.0-dev",
   "description": "This is the Node.js implementation of the Symplify Server-Side Testing SDK.",
   "license": "MIT",
   "main": "lib/index.js",
@@ -12,12 +12,14 @@
     "dev": "tsc --watch",
     "lint": "eslint src test",
     "build": "tsc",
+    "bench": "npm run build && find benchmark -name '*bench*.js' | xargs node",
     "test": "jest"
   },
   "devDependencies": {
     "@types/jest": "^27.4.1",
     "@typescript-eslint/eslint-plugin": "^5.21.0",
     "@typescript-eslint/parser": "^5.21.0",
+    "benny": "^3.7.1",
     "eslint": "^8.14.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.5.0",
