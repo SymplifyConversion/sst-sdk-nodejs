@@ -88,4 +88,59 @@ describe("WebsiteData", () => {
         expect(data.getVisitorID()).toBe("goober%22");
         expect(data.getAllocation(testProject)).toStrictEqual(testVar);
     });
+
+    test("handles nonexistent preview data", () => {
+        const testSiteID = "4711";
+        const cookieData = {
+            [testSiteID]: {
+                "1337": [42],
+                "1337_ch": 1,
+                aud_p: [1337],
+                visid: "goober%22",
+            },
+            _g: 1,
+        };
+
+        const cookies = makeCookieJar();
+        cookies.set("sg_cookies", JSON.stringify(cookieData), 1);
+        const data = new WebsiteData(testSiteID, cookies);
+
+        expect(data.getPreviewData()).toBe(null);
+    });
+
+    test("handles legacy preview data", () => {
+        const testSiteID = "4711";
+        const cookieData = {
+            [testSiteID]: {
+                pmr: 9999, // legacy data, for sst we need the pmv property as well
+            },
+            _g: 1,
+        };
+
+        const cookies = makeCookieJar();
+        cookies.set("sg_cookies", JSON.stringify(cookieData), 1);
+        const data = new WebsiteData(testSiteID, cookies);
+
+        expect(data.getPreviewData()).toBe(null);
+    });
+
+    test("can get preview data", () => {
+        const testSiteID = "4711";
+        const cookieData = {
+            [testSiteID]: {
+                pmr: 9999,
+                pmv: 99991,
+            },
+            _g: 1,
+        };
+
+        const cookies = makeCookieJar();
+        cookies.set("sg_cookies", JSON.stringify(cookieData), 1);
+        const data = new WebsiteData(testSiteID, cookies);
+
+        expect(data.getPreviewData()).toStrictEqual({
+            projectID: 9999,
+            variationID: 99991,
+        });
+    });
 });
