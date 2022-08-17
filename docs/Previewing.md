@@ -27,12 +27,16 @@ How it works
 
 Opening in preview mode sets the `"pmr"` property in the website object in the
 `sg_cookies` JSON cookie to the ID of the previewed project. The ID of the
-previewed variation is written next to it under the key `"pmv”`. The SST SDK
-when checking a project for variation allocation will always check the preview
-status first. If a visitor is previewing a project variation, no allocation
-calculation is performed, but the persistence works as usual. The `js-sdk`
-frontend is aware of the preview status, it will prevent goal tracking etc. and
-expose some extra information about the allocation and audience calculation.
+previewed variation is written next to it under the key `"pmv”`.
+
+The SST SDK when checking a project for variation allocation will always check
+the preview status first. If a visitor is previewing a project variation, no
+allocation calculation is performed (the preview status overrides it), but the
+allocation persistence works as usual.
+
+The `js-sdk` frontend is aware of the preview status, it will prevent goal
+tracking etc. and expose some extra information about the allocation and
+audience calculation.
 
 Security
 ========
