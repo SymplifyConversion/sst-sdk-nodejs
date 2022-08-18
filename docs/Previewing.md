@@ -17,6 +17,8 @@ Features
 
 * in preview mode, a test will not track any goals
 
+* when previewing, you can debug audience rules, seeing the results of subexpressions
+
 How to use it
 =============
 
@@ -38,10 +40,16 @@ The `js-sdk` frontend is aware of the preview status, it will prevent goal
 tracking etc. and expose some extra information about the allocation and
 audience calculation.
 
+The project audience when previewing will be "traced" by the server running the
+SDK, annotating the rules expression with results of sub-expressions and share
+this trace back with the requesting browser via a cookie ("sg_audience_trace").
+
 Security
 ========
 
 The purpose of the preview feature is to let you double-check if a test is going
-to work before activating it. It is not meant to hide the test project from a
-potential attacker. As such, the implementation described above is only there to
-prevent visitors from mistakenly enabling a project preview.
+to work and how it will look before activating it. It is not meant to hide
+project configurations from any potential attacker.
+
+Since the preview shows the results of subexpressions in any project custom
+audience rules, do not use any sensitive information in audience rules. 

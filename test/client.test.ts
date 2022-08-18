@@ -41,6 +41,11 @@ describe("SymplifySDK client", () => {
                 }
             }
 
+            const checkExtraCookieValues = t.expect_extra_cookies || {};
+            for (const [name, value] of Object.entries(checkExtraCookieValues)) {
+                expect(cookies.get(name)).toStrictEqual(value);
+            }
+
             const reVariation = new RegExp(t.expect_variation_match);
             expect(variation || "null").toMatch(reVariation);
         });

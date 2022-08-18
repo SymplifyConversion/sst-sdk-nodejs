@@ -172,7 +172,7 @@
     "website_id": "10001",
     "test_project_name": "custom audience",
     "audience_attributes": {
-        "foo": "baz"
+      "foo": "baz"
     },
     "expect_variation_match": null
   },
@@ -182,8 +182,73 @@
     "website_id": "10001",
     "test_project_name": "custom audience",
     "audience_attributes": {
-        "foo": "bar"
+      "foo": "bar"
     },
     "expect_variation_match": "Original"
+  },
+  {
+    "test_name": "preview overrides allocation",
+    "sdk_config": "sdk_config.json",
+    "website_id": "10001",
+    "cookies": {
+      "sg_cookies": "{%2210001%22:{%22visid%22:%22foobar%22%2C%22pmr%22:1001%2C%22pmv%22:10013}%2C%22_g%22:1}"
+    },
+    "test_project_name": "test project",
+    "expect_variation_match": "active variation 2"
+  },
+  {
+    "test_name": "preview overrides paused state",
+    "sdk_config": "sdk_config.json",
+    "website_id": "10001",
+    "cookies": {
+      "sg_cookies": "{%2210001%22:{%22visid%22:%22foobar%22%2C%22pmr%22:1001%2C%22pmv%22:10012}%2C%22_g%22:1}"
+    },
+    "test_project_name": "test project",
+    "expect_variation_match": "paused variation 1"
+  },
+  {
+    "test_name": "preview allocation is persisted",
+    "sdk_config": "sdk_config.json",
+    "website_id": "10001",
+    "cookies": {
+      "sg_cookies": "{%2210001%22:{%22visid%22:%22foobar%22%2C%22pmr%22:1001%2C%22pmv%22:10012}%2C%22_g%22:1}"
+    },
+    "test_project_name": "test project",
+    "expect_variation_match": "paused variation 1",
+    "expect_sg_cookie_properties_match": {
+      "10001/1001_ch": 1,
+      "10001/1001": [10012],
+      "10001/aud_p": [1001]
+    }
+  },
+  {
+    "test_name": "preview shows true audience trace",
+    "sdk_config": "sdk_config.json",
+    "website_id": "10001",
+    "test_project_name": "custom audience",
+    "audience_attributes": {
+      "foo": "bar"
+    },
+    "cookies": {
+      "sg_cookies": "{%2210001%22:{%22visid%22:%22foobar%22%2C%22pmr%22:1005%2C%22pmv%22:10051}%2C%22_g%22:1}"
+    },
+    "expect_extra_cookies": {
+      "sg_audience_trace": "[{\"call\":\"equals\",\"result\":true},[{\"call\":\"string-attribute\",\"result\":\"bar\"},\"foo\"],\"bar\"]"
+    }
+  },
+  {
+    "test_name": "preview shows false audience trace",
+    "sdk_config": "sdk_config.json",
+    "website_id": "10001",
+    "test_project_name": "custom audience",
+    "audience_attributes": {
+      "foo": "baz"
+    },
+    "cookies": {
+      "sg_cookies": "{%2210001%22:{%22visid%22:%22foobar%22%2C%22pmr%22:1005%2C%22pmv%22:10051}%2C%22_g%22:1}"
+    },
+    "expect_extra_cookies": {
+      "sg_audience_trace": "[{\"call\":\"equals\",\"result\":false},[{\"call\":\"string-attribute\",\"result\":\"baz\"},\"foo\"],\"bar\"]"
+    }
   }
 ]

@@ -12,6 +12,8 @@ import {
     parse,
     PrimitiveFn,
     RulesEngineError,
+    TracedList,
+    traceEval,
 } from "./rules-engine";
 
 type AudienceError = RulesEngineError;
@@ -55,6 +57,20 @@ export class Audience {
 
         if (!(typeof result == "boolean")) {
             return { message: `audience result was not boolean (${result})` };
+        }
+
+        return result;
+    }
+
+    /**
+     * trace interprets the rules in the given environment, and annotates the
+     * rules with partial values.
+     */
+    trace(env: Environment): TracedList | AudienceError {
+        const result = traceEval(this.rules, env, primitives);
+
+        if (!Array.isArray(result)) {
+            return { message: `audience trace failed (expected a list, but got ${result})` };
         }
 
         return result;
