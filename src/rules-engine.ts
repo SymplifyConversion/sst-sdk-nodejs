@@ -1,6 +1,6 @@
-/**
- * The rules syntax is a subset of JSON.
- */
+//
+// The rules syntax is a subset of JSON.
+//
 export type Expr = Atom | List;
 export type Atom = string | number | boolean;
 export type List = Array<Expr>;
@@ -135,4 +135,44 @@ function evalApply(
 
 export function isError(x: unknown): x is RulesEngineError {
     return (x as RulesEngineError).message !== undefined;
+}
+
+//
+// A rules expression can be "traced", which means the syntax tree is evaluated
+// node by node, and function calls get annotated in-place with their result.
+// This can be used for debugging or testing expressions in development.
+//
+
+export type TracedExpr = TracedAtom | TracedList;
+export type TracedAtom = TracedApply | RulesEngineError | Atom;
+export type TracedApply = { call: string; result: TracedAtom };
+export type TracedList = Array<TracedExpr>;
+
+/**
+ * Trace the evaluation of the given rules expression.
+ *
+ * @param ast the expression to evaluate
+ * @param env the environment to evaluate in
+ * @param primitives implementations of functions that can be called, can refer to the environment
+ * @returns the given ast, each node annotated with their partial result
+ */
+export function traceEval(
+    ast: Expr,
+    env: Environment,
+    primitives: Record<string, PrimitiveFn>,
+): TracedExpr | RulesEngineError {
+    if (Array.isArray(ast) && typeof ast[0] == "string") {
+        const symbol = ast[0];
+        const args = ast.slice(1);
+        const value = evalApply(symbol, args, env, primitives);
+
+        // this is not very efficient, but the tracing is for previews/debugging only
+        // and this implementation is simple
+        const tracedArgs = args.map((arg) => traceEval(arg, env, primitives));
+
+        // returns the same ast with partial results injected
+        return [{ call: symbol, result: value }, ...tracedArgs];
+    }
+
+    return evaluate(ast, env, primitives);
 }

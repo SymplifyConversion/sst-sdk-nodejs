@@ -75,7 +75,7 @@ function numberFun(a: Atom, b: Atom, op: (x: number, y: number) => Atom): Audien
     return op(a, b);
 }
 
-const primitives: Record<string, PrimitiveFn> = {
+export const primitives: Record<string, PrimitiveFn> = {
     // boolean operations
     not: (args: Atom[]) => {
         const [arg] = args;

@@ -1,6 +1,7 @@
 import fs from "fs";
 
-import { Audience } from "../src/audience";
+import { Audience, primitives } from "../src/audience";
+import { traceEval } from "../src/rules-engine";
 
 describe("Audience validation", () => {
     const testData = JSON.parse(fs.readFileSync("test/audience_validation_spec.json").toString());
@@ -95,6 +96,27 @@ describe("Audience attributes compatibility tests", () => {
                     }
                 });
             }
+        });
+    }
+});
+
+/**
+ * These test cases are defined in JSON to enable portable repeatable testing for multiple SDKs.
+ *
+ * Part of the audience test suite because of the `primitives` dependency.
+ */
+describe("Rules expression tracing compatibility tests", () => {
+    const testData = JSON.parse(fs.readFileSync("test/audience_tracing_spec.json").toString());
+
+    for (const { test_name, skip, rules, attributes, expect_trace } of testData) {
+        if (skip) {
+            console.log(`skipping test '${test_name}' (because ${skip})`);
+            continue;
+        }
+
+        test(test_name, () => {
+            const actualTrace = traceEval(rules, { attributes }, primitives);
+            expect(actualTrace).toStrictEqual(expect_trace);
         });
     }
 });

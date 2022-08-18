@@ -1,0 +1,67 @@
+[
+  {
+    "test_name": "true number compare",
+    "rules": ["any", [">", ["number-attribute", "points"], 100]],
+    "attributes": { "points": 1000 },
+    "expect_trace": [
+      { "call": "any", "result": true },
+      [
+        { "call": ">", "result": true },
+        [{ "call": "number-attribute", "result": 1000 }, "points"],
+        100
+      ]
+    ]
+  },
+  {
+    "test_name": "false string compare",
+    "rules": ["any", ["contains", ["string-attribute", "foo"], "bar"]],
+    "attributes": { "foo": "baz" },
+    "expect_trace": [
+      { "call": "any", "result": false },
+      [
+        { "call": "contains", "result": false },
+        [{ "call": "string-attribute", "result": "baz" }, "foo"],
+        "bar"
+      ]
+    ]
+  },
+  {
+    "test_name": "errors bubble up",
+    "rules": ["any", [">", ["number-attribute", "points"], 100]],
+    "attributes": {},
+    "expect_trace": [
+      { "call": "any", "result": { "message": "'points' is not a number" } },
+      [
+        { "call": ">", "result": { "message": "'points' is not a number" } },
+        [
+          {
+            "call": "number-attribute",
+            "result": { "message": "'points' is not a number" }
+          },
+          "points"
+        ],
+        100
+      ]
+    ]
+  },
+  {
+    "test_name": "bool bonanza",
+    "rules": [
+      "any",
+      ["bool-attribute", "no"],
+      ["any", ["bool-attribute", "yes"]],
+      ["all", ["bool-attribute", "yes"], ["any"]]
+    ],
+    "attributes": { "yes": true, "no": false },
+    "expect_trace": [
+      { "call": "any", "result": true },
+      [{ "call": "bool-attribute", "result": false }, "no"],
+      [{ "call": "any", "result": true }, [{ "call": "bool-attribute", "result": true }, "yes"]],
+      [
+        { "call": "all", "result": false },
+        [{ "call": "bool-attribute", "result": true }, "yes"],
+        [{ "call": "any", "result": false }]
+      ]
+    ]
+  }
+]
