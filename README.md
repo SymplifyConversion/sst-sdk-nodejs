@@ -112,8 +112,11 @@ variation:
 ```js
 function getDiscounts(req, res) {
 
+    // `cookieJar` is an example function explained in this README
     const cookies = cookieJar('.example.com', req, res);
+    // this code assumes you have a `lookupGeoIP` helper function in your project 
     const country = lookupGeoIP(req)?.country || "unknown";
+
     const customAttributes = { country };
 
     switch (sst.findVariation('Discounts, May 2022', cookies, customAttributes)) {
