@@ -232,7 +232,7 @@ function handlePreview(
 
     const audienceTrace = project.audience?.trace({ attributes: audienceAttributes });
     if (audienceTrace) {
-        cookies.set("sg_audience_trace", JSON.stringify(audienceTrace), 0);
+        cookies.set("sg_audience_trace", JSON.stringify(audienceTrace), 1);
     }
 
     if (!doesAudienceApply(project, audienceAttributes, log)) {
