@@ -22,20 +22,67 @@ npm i @symplify-conversion/sst-sdk-nodejs
 ## Usage
 
 See [the examples directory](./examples/) for full code examples, the snippets
-below have been extracted from the surrounding app code for brevity.
+below have been extracted from their surrounding app code for brevity.
+
+### Initializing
 
 ```js
 // You need to import the SDK, of course.
 const sstsdk = require('@symplify-conversion/sst-sdk-nodejs');
 
-// The SDK should be setup once in a long runnning server, e.g. on startup with
-// your other dependecies.
+// The SDK should be setup once in a long runnning server process, e.g. on
+// startup with your other dependecies.
 const sst = new sstsdk(process.env['SSTSDK_WEBSITEID']);
+```
 
-// To manage persistent allocations, the SDK needs to read and write cookies.
-// Each web framework has a different way to get this functionality.
-// This function `cookieJar` is one way to make an adapter for using the SDK
-// when using the express and cookie-parser modules.
+### Finding a project variation
+
+When you want to select different code paths based on variations in an
+A/B test, call the `findVariation` method of the SDK client.
+
+For example: if you have a webshop, with a function `views.productPage` which
+renders HTML for a product details page, and shows any applicable discounts:
+
+```js
+app.get('/products/:sku', (req, res) => {
+    const discounts = getDiscounts(req, res);
+    res.send(views.productPage(sku, discounts));
+})
+```
+
+`getDiscounts` has some business logic for identifying applicable discounts,
+and here you decide to test different variations. You set up a test named
+"Discounts, May 2022" with variations "Original", "huge", and "small", and
+then use the SDK client to find the variation for each web request.
+
+```js
+function getDiscounts(req, res) {
+
+    // `findVariation` needs a cookie adapter, see below in this README for example code.
+    const cookies = cookieJar('.example.com', req, res);
+
+    switch (sst.findVariation('Discounts, May 2022', cookies)) {
+        case 'huge':
+            return [0.25];
+        case 'small':
+            return [0.1];
+    }
+
+    // Always have a fall back. `findVariation` returns null if the visitor was
+    // not allocated. This example project also has a variation named 'Original'
+    // which we let fall through here.
+    return [];
+}
+```
+
+### Cookie integration
+
+To ensure visitors get the same variation consistently, the SDK needs to
+read and write cookies. Each web framework has a different way to get this
+functionality. This function `cookieJar` is one way to make an adapter for
+using the SDK when using the `express` and `cookie-parser` libraries.
+
+```js
 function cookieJar(domain, req, res) {
     return {
         get: (name) => req.cookies[name],
@@ -45,31 +92,44 @@ function cookieJar(domain, req, res) {
         },
     }
 }
+```
 
-// `getDiscounts` is a helper called by handlers in this example
+### Custom audience
+
+It's possible to limit for which requests/visitors a certain test project
+should apply by using "audience" rules. See [Audiences.md](docs/Audiences.md)
+for details.
+
+The audience is evaluated when your server calls `findVariation`, and if the
+rules you have setup in the audience references "custom attributes" your
+server must provide the values of these attributes for each request.
+
+For example, you might want a test project to only apply for visitors from a
+certain country. The audience can be configured in your project, using a
+custom attribute "country", and then your server provides it when finding the
+variation:
+
+```js
 function getDiscounts(req, res) {
 
-    // When you want to select different code paths based on variations in an
-    // A/B test, call `findVariation` (which needs the cookies adapter).
-    switch (sst.findVariation('Discounts, May 2022', cookieJar('.example.com', req, res))) {
+    // `cookieJar` is an example function explained in this README
+    const cookies = cookieJar('.example.com', req, res);
+    // this code assumes you have a `lookupGeoIP` helper function in your project 
+    const country = lookupGeoIP(req)?.country || "unknown";
+
+    const customAttributes = { country };
+
+    switch (sst.findVariation('Discounts, May 2022', cookies, customAttributes)) {
         case 'huge':
             return [0.25];
         case 'small':
             return [0.1];
     }
 
-    // Always have a fall back. `findVariation` returns null if the visitor was
-    // not allocated. The example project also has a variation named 'Original'
-    // which we let fall through here.
+    // `findVariation` returns null if the project audience does not match for
+    // a given request. We handle that by a fallthrough return here.
     return [];
 }
-
-// In this imagined example, we assume views.productPage renders the HTML for
-// a product details page, and shows any available discounts.
-app.get('/products/:sku', (req, res) => {
-    const discounts = getDiscounts(req, res);
-    res.send(views.productPage(sku, discounts));
-})
 ```
 
 ## SDK Development
