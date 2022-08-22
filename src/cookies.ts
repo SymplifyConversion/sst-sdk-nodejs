@@ -20,6 +20,14 @@ export type CookieWriter = {
 
 export type CookieJar = CookieReader & CookieWriter;
 
+/**
+ * PreviewData is used by the SDK when users are previewing tests without activating them.
+ */
+export type PreviewData = {
+    projectID: number;
+    variationID: number;
+};
+
 export class JSONCookieCodec {
     underlying: CookieJar;
 
@@ -43,6 +51,8 @@ export class JSONCookieCodec {
 const JSON_COOKIE_NAME = "sg_cookies";
 const JSON_COOKIE_VERSION_KEY = "_g";
 const JSON_COOKIE_VISITOR_ID_KEY = "visid";
+const JSON_COOKIE_PREVIEW_PROJECT_KEY = "pmr";
+const JSON_COOKIE_PREVIEW_VARIATION_KEY = "pmv";
 const SUPPORTED_JSON_COOKIE_VERSION = 1;
 
 /**
@@ -120,6 +130,26 @@ export class WebsiteData {
         }
 
         return undefined;
+    }
+
+    /**
+     * Get current preview config from the website data.
+     *
+     * @returns the current preview config if it exists, null otherwise
+     */
+    getPreviewData(): PreviewData | null {
+        const projectID = this.get(JSON_COOKIE_PREVIEW_PROJECT_KEY);
+        const variationID = this.get(JSON_COOKIE_PREVIEW_VARIATION_KEY);
+
+        if (typeof projectID !== "number") {
+            return null;
+        }
+
+        if (typeof variationID !== "number") {
+            return null;
+        }
+
+        return { projectID, variationID };
     }
 
     private get(key: string): unknown {

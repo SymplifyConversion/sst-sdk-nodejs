@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import { CookieJar, visitorHasOptedIn, WebsiteData } from "./cookies";
+import { CookieJar, CookieWriter, visitorHasOptedIn, WebsiteData } from "./cookies";
 import { httpsGET } from "./http";
 import { Logger, NullLogger } from "./logger";
 import {
@@ -7,9 +7,12 @@ import {
     doesAudienceApply,
     findProjectWithName,
     findVariationForVisitor,
+    findVariationWithID,
     parseConfigJSON,
     PrivacyMode,
+    ProjectConfig,
     SymplifyConfig,
+    VariationConfig,
 } from "./project";
 import { ensureVisitorID } from "./visitor";
 
@@ -117,54 +120,47 @@ export class SymplifySDK {
             return null;
         }
 
+        const visitorID = ensureVisitorID(siteData, this.idGenerator);
+        if (!visitorID) {
+            this.log.error("could not get or generate a visitor ID");
+            return null;
+        }
+
         const project = findProjectWithName(this.config.latest, projectName);
         if (!project) {
             this.log.error(`findVariation: unknown project: ${projectName}`);
             return null;
         }
 
+        // 1. if previewing a project, handle and return early
+
+        if (siteData.getPreviewData() !== null) {
+            return handlePreview(siteData, project, cookies, audienceAttributes, this.log);
+        }
+
         if (project.state !== "active") {
             return null;
         }
 
-        const currAllocation = siteData.getAllocation(project);
+        // 2. if we already have an allocation from a previous visit, use that and return early
 
-        switch (currAllocation) {
-            case undefined:
-                // no allocation data
-                break;
-            case null:
-                // explicit null allocation
-                return null;
-            default:
-                // variation allocation
-                return currAllocation.name;
+        if (siteData.getAllocation(project) !== undefined) {
+            const cookieAllocation = siteData.getAllocation(project);
+            return cookieAllocation ? cookieAllocation.name : null;
         }
 
-        // if we have not returned yet, we are about to make a decision about the visitor's allocation
+        // 3. no preview or variation from before: let's make a decision about the visitor's allocation
 
         if (!doesAudienceApply(project, audienceAttributes, this.log)) {
             // if the audience does not apply, we will not persist any variation so don't need to do anything else here
             return null;
         }
 
-        const visID = ensureVisitorID(siteData, this.idGenerator);
-        if (!visID) {
-            this.log.error("could not get or generate a visitor ID");
-            return null;
-        }
-
-        const variation = findVariationForVisitor(project, visID);
-
-        if (variation) {
-            siteData.rememberAllocation(project, variation);
-        } else {
-            siteData.rememberNullAllocation(project);
-        }
+        const variation = allocateVariation(siteData, project, visitorID);
 
         siteData.save(cookies);
 
-        return variation ? variation.name : null;
+        return variation?.name || null;
     }
 
     configURL(): string {
@@ -197,6 +193,62 @@ export class SymplifySDK {
     async fetchConfig(): Promise<SymplifyConfig> {
         return await this.httpGET(this.configURL()).then(parseConfigJSON);
     }
+}
+
+/**
+ * Calculate the variation allocation for the given visitor ID,
+ * save the allocation in the site data.
+ */
+function allocateVariation(
+    siteData: WebsiteData,
+    project: ProjectConfig,
+    visitorID: string,
+): VariationConfig | null {
+    const variation = findVariationForVisitor(project, visitorID);
+
+    if (variation) {
+        siteData.rememberAllocation(project, variation);
+    } else {
+        siteData.rememberNullAllocation(project);
+    }
+
+    return variation;
+}
+
+/**
+ * Get the preview variation name for the given visitor ID,
+ * update cookies if needed.
+ */
+function handlePreview(
+    siteData: WebsiteData,
+    project: ProjectConfig,
+    cookies: CookieWriter,
+    audienceAttributes: AudienceAttributes,
+    log: Logger,
+): string | null {
+    // While this function looks quite similar to allocating a variation
+    // normally, there are other things we handle here, such as tracing the
+    // audience evaluation.
+
+    const audienceTrace = project.audience?.trace({ attributes: audienceAttributes });
+    if (audienceTrace) {
+        cookies.set("sg_audience_trace", JSON.stringify(audienceTrace), 1);
+    }
+
+    if (!doesAudienceApply(project, audienceAttributes, log)) {
+        return null;
+    }
+
+    const variationID = siteData.getPreviewData()?.variationID;
+    const variation = variationID ? findVariationWithID(project, variationID) : null;
+
+    if (variation) {
+        siteData.rememberAllocation(project, variation);
+    }
+
+    siteData.save(cookies);
+
+    return variation?.name || null;
 }
 
 /**

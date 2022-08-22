@@ -36,6 +36,25 @@ export type VariationConfig = {
     state: ProjectState;
 };
 
+/**
+ * Look up the variation with the given ID in the given project.
+ */
+export function findVariationWithID(
+    project: ProjectConfig,
+    variationID: number,
+): VariationConfig | null {
+    for (const variation of project.variations) {
+        if (variation.id === variationID) {
+            return variation;
+        }
+    }
+
+    return null;
+}
+
+/**
+ * Look up the project with the given name, regardless of ID or active state.
+ */
 export function findProjectWithName(
     config: SymplifyConfig,
     projectName: string,
@@ -49,6 +68,11 @@ export function findProjectWithName(
     return null;
 }
 
+/**
+ * Allocate an active variation for the visitor in the given project.
+ *
+ * @returns null if the visitor ID is empty or the project or variation is not active
+ */
 export function findVariationForVisitor(
     project: ProjectConfig,
     visitorID: string,
