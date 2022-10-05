@@ -4,6 +4,7 @@ import { Audience, primitives } from "../src/audience";
 import { traceEval } from "../src/rules-engine";
 
 describe("Audience validation", () => {
+    // The JSON file is being fetched when doing the test by ./ci/retrieve_test_data.sh
     const testData = JSON.parse(fs.readFileSync("test/audience_validation_spec.json").toString());
 
     for (const s of testData) {
@@ -28,6 +29,7 @@ describe("Audience validation", () => {
  * These test cases are defined in JSON to enable portable repeatable testing for multiple SDKs.
  */
 describe("Audience expression compatibility tests", () => {
+    // The JSON file is being fetched when doing the test by ./ci/retrieve_test_data.sh
     const testData = JSON.parse(fs.readFileSync("test/audience_spec.json").toString());
 
     for (const s of testData) {
@@ -106,6 +108,7 @@ describe("Audience attributes compatibility tests", () => {
  * Part of the audience test suite because of the `primitives` dependency.
  */
 describe("Rules expression tracing compatibility tests", () => {
+    // The JSON file is being fetched when doing the test by ./ci/retrieve_test_data.sh
     const testData = JSON.parse(fs.readFileSync("test/audience_tracing_spec.json").toString());
 
     for (const { test_name, skip, rules, attributes, expect_trace } of testData) {

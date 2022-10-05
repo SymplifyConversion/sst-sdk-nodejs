@@ -3,6 +3,7 @@ import { SymplifySDK } from "../src/client";
 import { constantHTTP, makeCookieJar } from "./helpers";
 
 describe("SymplifySDK client", () => {
+    // The JSON file is being fetched when doing the test by ./ci/retrieve_test_data.sh
     const testData = JSON.parse(fs.readFileSync("test/test_cases.json").toString());
 
     for (const t of testData) {
