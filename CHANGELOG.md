@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.5.1] - 2022-10-04
+
+### Changed
+- changed location from where test data are fetched. 
+It now uses the [SST-documentation](https://github.com/SymplifyConversion/sst-documentation/) repository
+- changed location of the documentation for Audience and Previewing.
+It now uses the [SST-documentations doc folder](https://github.com/SymplifyConversion/sst-documentation/tree/main/docs)
+
+### Removed
+- removed all test data from this repository. 
+It is now located in [SST-documentations data folder](https://github.com/SymplifyConversion/sst-documentation/tree/main/test)
+- removed all documentation in `docs` from this repository.
+It is now located in [SST-documentations docs folder](https://github.com/SymplifyConversion/sst-documentation/tree/main/docs)
+
 ## [0.5.0] - 2022-08-24
 ### Added
 - project preview support (see docs)

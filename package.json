@@ -13,7 +13,7 @@
     "lint": "eslint src test",
     "build": "tsc",
     "bench": "npm run build && find benchmark -name '*bench*.js' | xargs node",
-    "test": "jest"
+    "test": "./ci/retrieve_test_data.sh && jest"
   },
   "devDependencies": {
     "@types/jest": "^27.4.1",

@@ -97,7 +97,7 @@ function cookieJar(domain, req, res) {
 ### Custom audience
 
 It's possible to limit for which requests/visitors a certain test project
-should apply by using "audience" rules. See [Audiences.md](docs/Audiences.md)
+should apply by using "audience" rules. See [Audiences.md](https://github.com/SymplifyConversion/sst-documentation/blob/main/docs/Audicences.md)
 for details.
 
 The audience is evaluated when your server calls `findVariation`, and if the
