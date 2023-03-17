@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.5.2] - 2023-03-17
+
 ### Changed
 - add reference in documentation to [SST-documentation](https://github.com/SymplifyConversion/sst-documentation/) 
 repository regarding cookie usage and setup
@@ -61,7 +63,8 @@ It is now located in [SST-documentations docs folder](https://github.com/Symplif
   - injectable log delegate
   - injectable http fetch delegate
 
-[Unreleased]: https://github.com/SymplifyConversion/sst-sdk-nodejs/compare/v0.5.1...HEAD
+[Unreleased]: https://github.com/SymplifyConversion/sst-sdk-nodejs/compare/v0.5.2...HEAD
+[0.5.2]: https://github.com/SymplifyConversion/sst-sdk-nodejs/releases/tag/v0.5.2
 [0.5.1]: https://github.com/SymplifyConversion/sst-sdk-nodejs/releases/tag/v0.5.1
 [0.5.0]: https://github.com/SymplifyConversion/sst-sdk-nodejs/releases/tag/v0.5.0
 [0.4.0]: https://github.com/SymplifyConversion/sst-sdk-nodejs/releases/tag/v0.4.0
