@@ -77,6 +77,8 @@ function getDiscounts(req, res) {
 
 ### Cookie integration
 
+See [SST-documentation](https://github.com/SymplifyConversion/sst-documentation/) repository for general cookie setup information.
+
 To ensure visitors get the same variation consistently, the SDK needs to
 read and write cookies. Each web framework has a different way to get this
 functionality. This function `cookieJar` is one way to make an adapter for
