@@ -32,19 +32,19 @@ describe("Variation allocation", () => {
             name: "test project",
             state: "active",
             variations: [
-                { 
-                    id: originalID, 
-                    name: "Original", 
-                    state: "active", 
-                    weight: 50, 
-                    distribution: 50 
+                {
+                    id: originalID,
+                    name: "Original",
+                    state: "active",
+                    weight: 50,
+                    distribution: 50
                 },
-                { 
-                    id: variationID, 
-                    name: "Variation", 
-                    state: "active", 
-                    weight: 50, 
-                    distribution: 50 
+                {
+                    id: variationID,
+                    name: "Variation",
+                    state: "active",
+                    weight: 50,
+                    distribution: 50
                 },
             ],
         };

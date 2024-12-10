@@ -83,12 +83,12 @@ function testConfig(audience_rules?: List): ProjectConfig {
         name: "test project please ignore",
         state: "active",
         audience_rules,
-        variations: [{ 
-            id: 99991, 
-            name: "Original", 
-            state: "active", 
-            weight: 100, 
-            distribution: 100 
+        variations: [{
+            id: 99991,
+            name: "Original",
+            state: "active",
+            weight: 100,
+            distribution: 100
         }],
     };
 }
