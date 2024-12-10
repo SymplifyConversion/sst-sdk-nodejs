@@ -1,6 +1,6 @@
 {
   "name": "@symplify-conversion/sst-sdk-nodejs",
-  "version": "0.5.4-dev",
+  "version": "1.0.0",
   "description": "This is the Node.js implementation of the Symplify Server-Side Testing SDK.",
   "license": "MIT",
   "main": "lib/index.js",
