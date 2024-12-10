@@ -16,7 +16,13 @@ describe("WebsiteData", () => {
 
     test("can set and get allocation info", () => {
         const active: ProjectState = "active";
-        const testVar = { id: 42, name: "a variation", state: active, weight: 100, distribution: 100 };
+        const testVar = { 
+            id: 42, 
+            name: "a variation", 
+            state: active, 
+            weight: 100, 
+            distribution: 100 
+        };
         const testProject = { id: 1337, name: "project", variations: [testVar], state: active };
         const data = new WebsiteData("4711", makeCookieJar());
         data.rememberAllocation(testProject, testVar);
@@ -33,7 +39,13 @@ describe("WebsiteData", () => {
 
     test("can save by setting cookie", () => {
         const active: ProjectState = "active";
-        const testVar = { id: 42, name: "a variation", state: active, weight: 100, distribution: 100 };
+        const testVar = { 
+            id: 42, 
+            name: "a variation", 
+            state: active, 
+            weight: 100, 
+            distribution: 100 
+        };
         const testProject = { id: 1337, name: "project", variations: [testVar], state: active };
         const cookies = makeCookieJar();
         const data = new WebsiteData("4711", cookies);
