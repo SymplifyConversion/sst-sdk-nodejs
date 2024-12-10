@@ -88,7 +88,7 @@ export function findVariationForVisitor(
     let pointer = 0;
     for (const variation of project.variations) {
         variation.distribution
-            ? (pointer += variation.distribution) 
+            ? (pointer += variation.distribution)
             : (pointer += variation.weight);
         if (hash <= pointer) {
             return variation.state === "active" ? variation : null;

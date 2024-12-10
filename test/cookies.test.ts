@@ -21,7 +21,7 @@ describe("WebsiteData", () => {
             name: "a variation",
             state: active,
             weight: 100,
-            distribution: 100
+            distribution: 100,
         };
         const testProject = { id: 1337, name: "project", variations: [testVar], state: active };
         const data = new WebsiteData("4711", makeCookieJar());
@@ -44,7 +44,7 @@ describe("WebsiteData", () => {
             name: "a variation",
             state: active,
             weight: 100,
-            distribution: 100
+            distribution: 100,
         };
         const testProject = { id: 1337, name: "project", variations: [testVar], state: active };
         const cookies = makeCookieJar();
@@ -85,7 +85,7 @@ describe("WebsiteData", () => {
             name: "a variation",
             state: "active",
             weight: 100,
-            distribution: 100
+            distribution: 100,
         };
         const testProject: ProjectConfig = {
             id: 1337,
