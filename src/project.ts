@@ -34,6 +34,7 @@ export type VariationConfig = {
     name: string;
     weight: number;
     state: ProjectState;
+    distribution: number;
 };
 
 /**
@@ -86,7 +87,9 @@ export function findVariationForVisitor(
 
     let pointer = 0;
     for (const variation of project.variations) {
-        pointer += variation.weight;
+        variation.distribution
+            ? (pointer += variation.distribution)
+            : (pointer += variation.weight);
         if (hash <= pointer) {
             return variation.state === "active" ? variation : null;
         }

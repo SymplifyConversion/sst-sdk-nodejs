@@ -5,8 +5,8 @@ const TEST_PROJECT: ProjectConfig = {
     name: "discount",
     state: "active",
     variations: [
-        { id: 42, name: "original", state: "active", weight: 67 },
-        { id: 1337, name: "massive", state: "active", weight: 33 },
+        { id: 42, name: "original", state: "active", weight: 67, distribution: 66.66 },
+        { id: 1337, name: "massive", state: "active", weight: 33, distribution: 33.33 },
     ],
 };
 
@@ -32,8 +32,20 @@ describe("Variation allocation", () => {
             name: "test project",
             state: "active",
             variations: [
-                { id: originalID, name: "Original", state: "active", weight: 50 },
-                { id: variationID, name: "Variation", state: "active", weight: 50 },
+                {
+                    id: originalID,
+                    name: "Original",
+                    state: "active",
+                    weight: 50,
+                    distribution: 50,
+                },
+                {
+                    id: variationID,
+                    name: "Variation",
+                    state: "active",
+                    weight: 50,
+                    distribution: 50,
+                },
             ],
         };
 
@@ -54,9 +66,9 @@ describe("Variation allocation", () => {
             name: "discount",
             state: "active",
             variations: [
-                { id: 42, name: "original", state: "active", weight: 25 },
-                { id: 1337, name: "massive", state: "paused", weight: 25 },
-                { id: 11111, name: "extra", state: "active", weight: 25 },
+                { id: 42, name: "original", state: "active", weight: 25, distribution: 25 },
+                { id: 1337, name: "massive", state: "paused", weight: 25, distribution: 25 },
+                { id: 11111, name: "extra", state: "active", weight: 25, distribution: 25 },
             ],
         };
         function findVariation(visid: string) {
@@ -79,9 +91,9 @@ describe("Variation allocation", () => {
             name: "discount",
             state: "paused",
             variations: [
-                { id: 42, name: "original", state: "active", weight: 25 },
-                { id: 1337, name: "massive", state: "paused", weight: 25 },
-                { id: 11111, name: "extra", state: "active", weight: 25 },
+                { id: 42, name: "original", state: "active", weight: 25, distribution: 25 },
+                { id: 1337, name: "massive", state: "paused", weight: 25, distribution: 25 },
+                { id: 11111, name: "extra", state: "active", weight: 25, distribution: 25 },
             ],
         };
         expect(findVariationForVisitor(testProject, "anyone")).toBe(null);

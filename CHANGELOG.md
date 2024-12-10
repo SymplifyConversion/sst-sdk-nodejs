@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-## [0.5.3] - 2024-01-29
+
+## [1.0.0](https://github.com/SymplifyConversion/sst-sdk-nodejs/releases/tag/v1.0.0) - 2024-10-10
+
+### Added
+- Support for distribution value to get better precision on allocations
+
+## [0.5.3](https://github.com/SymplifyConversion/sst-sdk-nodejs/releases/tag/v0.5.3) - 2024-01-29
 
 ### Fixed
 - Updated to get all files back
