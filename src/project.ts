@@ -90,7 +90,7 @@ export function findVariationForVisitor(
         variation.distribution
             ? (pointer += variation.distribution)
             : (pointer += variation.weight);
-        if (hash <= pointer) {
+        if (hash < pointer) {
             return variation.state === "active" ? variation : null;
         }
     }
