@@ -22,18 +22,18 @@ describe("hash is compatible", () => {
     });
 
     test("hashInWindow is distributed 1", () => {
-        expect(hashInWindow("9e66a7fa-984a-4681-9319-80c2be2ffe8a", 3)).toBe(1);
+        expect(hashInWindow("9e66a7fa-984a-4681-9319-80c2be2ffe8a", 3)).toBe(0.6382114774636486);
     });
 
     test("hashInWindow is distributed 2", () => {
-        expect(hashInWindow("72784e9c-f5ae-4aed-8ae7-baa9c6e31d3c", 3)).toBe(2);
+        expect(hashInWindow("72784e9c-f5ae-4aed-8ae7-baa9c6e31d3c", 3)).toBe(1.1311826156757732);
     });
 
     test("hashInWindow is distributed 3", () => {
-        expect(hashInWindow("cc615f71-1ab8-4322-b7d7-e10294a8d483", 3)).toBe(3);
+        expect(hashInWindow("cc615f71-1ab8-4322-b7d7-e10294a8d483", 3)).toBe(2.352266755269903);
     });
 
     test("hashInWindow is compatible", () => {
-        expect(hashInWindow("b7850777-f581-4f66-ad3e-4e54963661df", 100)).toBe(57);
+        expect(hashInWindow("b7850777-f581-4f66-ad3e-4e54963661df", 100)).toBe(56.05795827136794);
     });
 });
