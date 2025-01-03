@@ -26,5 +26,5 @@ export function hashInWindow(str: string, window: number): number {
     hash /= 4_294_967_295; // unsigned max
     hash *= window; // fit window
 
-    return Math.ceil(hash);
+    return hash;
 }
