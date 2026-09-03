@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [1.0.2] - 2026-09-03
+
 ### Fixed
 - Previewing a project no longer duplicates the project's entry in the `aud_p`
   cookie list on every call to `findVariation`. Previously this could grow the
@@ -84,7 +86,8 @@ It is now located in [SST-documentations docs folder](https://github.com/Symplif
   - injectable log delegate
   - injectable http fetch delegate
 
-[Unreleased]: https://github.com/SymplifyConversion/sst-sdk-nodejs/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/SymplifyConversion/sst-sdk-nodejs/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/SymplifyConversion/sst-sdk-nodejs/releases/tag/v1.0.2
 [1.0.1]: https://github.com/SymplifyConversion/sst-sdk-nodejs/releases/tag/v1.0.1
 [1.0.0]: https://github.com/SymplifyConversion/sst-sdk-nodejs/releases/tag/v1.0.0
 [0.5.3]: https://github.com/SymplifyConversion/sst-sdk-nodejs/releases/tag/v0.5.3
