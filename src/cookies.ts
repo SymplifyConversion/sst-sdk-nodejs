@@ -98,7 +98,8 @@ export class WebsiteData {
 
     rememberAllocation(project: ProjectConfig, variation: VariationConfig): void {
         const prevAudP = this.get("aud_p");
-        this.set("aud_p", (Array.isArray(prevAudP) ? prevAudP : []).concat(project.id));
+        const audP = Array.isArray(prevAudP) ? prevAudP : [];
+        this.set("aud_p", audP.includes(project.id) ? audP : audP.concat(project.id));
         this.set(project.id + "_ch", 1);
         this.set(project.id + "", [variation.id]);
     }

@@ -242,7 +242,8 @@ function handlePreview(
     const variationID = siteData.getPreviewData()?.variationID;
     const variation = variationID ? findVariationWithID(project, variationID) : null;
 
-    if (variation) {
+    const alreadyAllocated = siteData.getAllocation(project);
+    if (variation && alreadyAllocated?.id !== variation.id) {
         siteData.rememberAllocation(project, variation);
     }
 

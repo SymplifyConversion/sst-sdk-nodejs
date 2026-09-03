@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Fixed
+- Previewing a project no longer duplicates the project's entry in the `aud_p`
+  cookie list on every call to `findVariation`. Previously this could grow the
+  `sg_cookies` cookie past the browser's size limit during long preview
+  sessions, causing requests to be rejected.
+
 ## [1.0.1] - 2025-01-03
 
 ### Fixed

@@ -29,6 +29,24 @@ describe("WebsiteData", () => {
         expect(data.getAllocation(testProject)).toStrictEqual(testVar);
     });
 
+    test("remembering the same allocation twice does not duplicate aud_p", () => {
+        const active: ProjectState = "active";
+        const testVar = {
+            id: 42,
+            name: "a variation",
+            state: active,
+            weight: 100,
+            distribution: 100,
+        };
+        const testProject = { id: 1337, name: "project", variations: [testVar], state: active };
+        const cookies = makeCookieJar();
+        const data = new WebsiteData("4711", cookies);
+        data.rememberAllocation(testProject, testVar);
+        data.rememberAllocation(testProject, testVar);
+        data.save(cookies);
+        expect(JSON.parse(cookies.get("sg_cookies"))["4711"].aud_p).toStrictEqual([1337]);
+    });
+
     test("can remember null allocations", () => {
         const active: ProjectState = "active";
         const testProject = { id: 1337, name: "project", variations: [], state: active };

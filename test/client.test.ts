@@ -51,4 +51,30 @@ describe("SymplifySDK client", () => {
             expect(variation || "null").toMatch(reVariation);
         });
     }
+
+    test("calling findVariation repeatedly in preview does not duplicate aud_p", async () => {
+        const cookies = makeCookieJar();
+        cookies.set(
+            "sg_cookies",
+            decodeURIComponent(
+                "{%2210001%22:{%22visid%22:%22foobar%22%2C%22pmr%22:1001%2C%22pmv%22:10012}%2C%22_g%22:1}",
+            ),
+            90,
+        );
+        const configJSON = fs.readFileSync("test/sdk_config.json").toString();
+        const httpGET = constantHTTP(configJSON);
+
+        const sdk = new SymplifySDK("10001", { httpGET });
+        await sdk.ready;
+
+        // Simulates a caller invoking findVariation multiple times per page
+        // view (e.g. a component re-rendering) while previewing a project.
+        sdk.findVariation("test project", cookies, {});
+        sdk.findVariation("test project", cookies, {});
+        sdk.findVariation("test project", cookies, {});
+        sdk.stop();
+
+        const sgCookies = JSON.parse(cookies.get("sg_cookies") || "{}");
+        expect(sgCookies["10001"].aud_p).toStrictEqual([1001]);
+    });
 });
